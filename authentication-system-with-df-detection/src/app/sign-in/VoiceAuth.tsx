@@ -25,12 +25,10 @@ export default function VoiceAuth({ passphrase, onConfirm }: VoiceAuthProps) {
         setStatus("failed");
         onConfirm(false);
       } else if (data.confirmed) {
-        setText(`✅ Confirmed! You said: "${data.text}"`);
         setText(`Confirmed! You said: "${data.text}"`);
         setStatus("confirmed");
         onConfirm(true);
       } else {
-        setText(`❌ Passphrase not recognised. You said: "${data.text}"`);
         setText(`Passphrase not recognised. You said: "${data.text}"`);
         setStatus("failed");
         onConfirm(false);
