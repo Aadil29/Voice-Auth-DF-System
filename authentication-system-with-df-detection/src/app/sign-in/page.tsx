@@ -3,6 +3,8 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
+import VoiceAuth from "@/app/sign-in/VoiceAuth";
+
 
 export default function SignInPage() {
   const router = useRouter();
@@ -53,7 +55,12 @@ export default function SignInPage() {
         <button type="submit" style={{ marginTop: "1rem" }}>
           Sign In
         </button>
+
+        
       </form>
+      <VoiceAuth />
+      
+
 
       {error && <p style={{ color: "red" }}>{error}</p>}
     </main>
