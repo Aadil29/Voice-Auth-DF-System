@@ -1,19 +1,31 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/firebase";
 import VoiceAuth from "@/app/sign-in/VoiceAuth";
-
+import { generatePassphrase } from "@/utils/example_phrases";
 
 export default function SignInPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [passphrase, setPassphrase] = useState("");
+  const [voiceConfirmed, setVoiceConfirmed] = useState(false);
+
+  useEffect(() => {
+    setPassphrase(generatePassphrase());
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!voiceConfirmed) {
+      setError("Voice authentication is required.");
+      return;
+    }
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/dashboard");
@@ -55,12 +67,12 @@ export default function SignInPage() {
         <button type="submit" style={{ marginTop: "1rem" }}>
           Sign In
         </button>
-
-        
       </form>
-      <VoiceAuth />
-      
 
+      <VoiceAuth
+        passphrase={passphrase}
+        onConfirm={(status: boolean) => setVoiceConfirmed(status)}
+      />
 
       {error && <p style={{ color: "red" }}>{error}</p>}
     </main>
