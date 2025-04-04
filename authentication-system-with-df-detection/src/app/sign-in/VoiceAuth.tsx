@@ -26,10 +26,12 @@ export default function VoiceAuth({ passphrase, onConfirm }: VoiceAuthProps) {
         onConfirm(false);
       } else if (data.confirmed) {
         setText(`✅ Confirmed! You said: "${data.text}"`);
+        setText(`Confirmed! You said: "${data.text}"`);
         setStatus("confirmed");
         onConfirm(true);
       } else {
         setText(`❌ Passphrase not recognised. You said: "${data.text}"`);
+        setText(`Passphrase not recognised. You said: "${data.text}"`);
         setStatus("failed");
         onConfirm(false);
       }
@@ -54,14 +56,14 @@ export default function VoiceAuth({ passphrase, onConfirm }: VoiceAuthProps) {
       )}
 
       {status === "listening" && (
-        <button disabled>🔊 Listening... (10 seconds)</button>
+        <button disabled>Listening... (10 seconds)</button>
       )}
 
       {status === "failed" && (
         <>
           <p style={{ color: "red" }}>{text}</p>
           <button onClick={handleVoiceAuth} style={{ marginTop: "1rem" }}>
-            🔁 Try Again
+            Try Again
           </button>
         </>
       )}
