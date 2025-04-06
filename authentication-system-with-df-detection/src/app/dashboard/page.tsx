@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signOut, onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/firebase";
+import Navbar from "@/app/components/Navbar";
+
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -22,26 +24,33 @@ export default function DashboardPage() {
     return () => unsubscribe();
   }, [router]);
 
-  const handleSignOut = async () => {
-    await signOut(auth);
-    router.push("/");
-  };
+  
 
   if (loading) {
     return <p>Loading...</p>;
   }
-
   return (
-    <main>
-      <h1>Dashboard</h1>
-      {user ? (
-        <>
-          <p>Welcome, {user.email}!</p>
-          <button onClick={handleSignOut}>Log Out</button>
-        </>
-      ) : (
-        <p>Not authenticated.</p>
-      )}
-    </main>
-  );
+     <>
+      <Navbar />
+        <main className="dashboard-content">
+          <section className="info-box">
+            <h2>What the Project Is About</h2>
+            <p>
+              Audio Shield is a voice authentication system with deepfake detection,
+              providing a secure and modern way to verify identity and ensure
+              integrity in audio-based systems.
+            </p>
+          </section>
+  
+          <section className="info-box">
+            <h2>Privacy & Misuse</h2>
+            <p>
+              This system is strictly for ethical and legitimate use only.
+              Do not use this platform for illegal activity or impersonation.
+              Violators may face permanent suspension and legal consequences.
+            </p>
+          </section>
+        </main>
+      </>
+    );
 }

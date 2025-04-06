@@ -35,46 +35,49 @@ export default function SignInPage() {
   };
 
   return (
-    <main>
+    <main className="auth-container">
+    <form onSubmit={handleSubmit} className="auth-form">
       <h1>Sign In</h1>
-      <form onSubmit={handleSubmit} style={{ display: "inline-block" }}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <br />
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-          />
-        </div>
-
-        <div style={{ marginTop: "0.5rem" }}>
-          <label htmlFor="password">Password</label>
-          <br />
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-          />
-        </div>
-
-        <button type="submit" style={{ marginTop: "1rem" }}>
-          Sign In
+  
+      <div>
+        <label htmlFor="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          required
+        />
+      </div>
+  
+      <div>
+        <label htmlFor="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+          required
+        />
+      </div>
+  
+      {/* Voice Auth Section Inside Form */}
+      <div className="voice-auth">
+        <p>Please say this phrase clearly:</p>
+        <div className="passphrase-box">{passphrase}</div>
+        <br />
+        <button type="button" onClick={() => setVoiceConfirmed(true)}>
+          Start Voice Authentication
         </button>
-      </form>
-
-      <VoiceAuth
-        passphrase={passphrase}
-        onConfirm={(status: boolean) => setVoiceConfirmed(status)}
-      />
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </main>
+      </div>
+  
+      <button type="submit">Sign In</button>
+  
+      {error && <p className="error-message">{error}</p>}
+    </form>
+  </main>
+  
   );
 }

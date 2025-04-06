@@ -21,41 +21,39 @@ export default function SignUpPage() {
   };
 
   return (
-    <main>
+    <main className="signup-container">
+    <form onSubmit={handleSubmit} className="signup-form">
       <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit} style={{ display: "inline-block" }}>
-        <div>
-          <label htmlFor="email">Email</label>
-          <br />
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-          />
-        </div>
-
-        <div style={{ marginTop: "0.5rem" }}>
-          <label htmlFor="password">Password</label>
-          <br />
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-          />
-        </div>
-
-        <button type="submit" style={{ marginTop: "1rem" }}>
-          Sign Up
-        </button>
-      </form>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </main>
+  
+      <div>
+        <label htmlFor="email">Email:</label>
+        <input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter email"
+          required
+        />
+      </div>
+  
+      <div>
+        <label htmlFor="password">Password:</label>
+        <input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter password"
+          required
+        />
+      </div>
+  
+      <button type="submit">Sign Up</button>
+  
+      {error && <p className="error-message">{error}</p>}
+    </form>
+  </main>
+  
   );
 }

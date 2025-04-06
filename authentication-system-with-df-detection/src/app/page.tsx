@@ -16,7 +16,9 @@ export default function HomePage() {
 
   return (
     <main>
-      <h1>Welcome to Our Application</h1>
+      <h1>Audio Shield</h1>
+      <h2>Secure voice authentication system, with audio deepfake detction.</h2>
+      <h3>Made by Muhammad Aadil Ghani</h3>
       <p>Please sign in or sign up to continue.</p>
       <p>
         <Link href="/sign-in">Sign In</Link> | <Link href="/sign-up">Sign Up</Link>

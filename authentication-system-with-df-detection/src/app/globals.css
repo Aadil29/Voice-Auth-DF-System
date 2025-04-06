@@ -1,4 +1,4 @@
-@import "tailwindcss";
+
 
 :root {
   --background: #ffffff;
@@ -7,7 +7,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #035974;
+    --background: #0e508d;
     --foreground: #ededed;
   }
 }
@@ -22,3 +22,294 @@ button {
   transition: background 0.2s ease;
 }
 
+h1 {
+  font-size: 3rem; 
+  font-weight: bold;
+  text-align: center;
+  margin-top: 3rem; 
+  padding-top: 4rem;
+}
+
+h2 {
+  font-size: 1.25rem; 
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+
+p {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0.5rem;
+  padding-top: 5rem;
+}
+
+
+
+/*sign up style */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  padding: 1rem;
+}
+
+.signup-form {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 350px; 
+  width: 100%;
+}
+
+/* Header */
+.signup-form h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #0e508d;
+  margin-bottom: 2rem;
+}
+
+/* Input labels and fields */
+.signup-form label {
+  display: block;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.signup-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Sign Up button  */
+.signup-form button {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 0.75rem;
+  background-color: #0e508d;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.signup-form button:hover {
+  background-color: #0b3c6c;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+
+
+
+
+
+/*signin */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  padding: 1rem;
+}
+
+.auth-form {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 350px;
+  width: 100%;
+}
+
+/* Header */
+.auth-form h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #0e508d;
+  margin-bottom: 2rem;
+}
+
+/* Input labels and fields */
+.auth-form label {
+  display: block;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+/* Voice Auth Section */
+.voice-auth {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.voice-auth h3 {
+  font-size: 1rem;
+  color: #000000;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.voice-auth .instruction {
+  font-size: 0.9rem;
+  color: orange;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+/* Passphrase */
+.passphrase-box {
+  background-color: #fff8f8;
+  color: #c62828;
+  border: 2px solid #c62828;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+/* Voice auth button */
+.voice-auth button {
+  background-color: #066b62;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.voice-auth button:hover {
+  background-color: #05574f;
+}
+
+/* Sign In button */
+.auth-form button[type="submit"] {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 0.75rem;
+  background-color: #0e508d;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.auth-form button[type="submit"]:hover {
+  background-color: #0b3c6c;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0e508d;
+  padding: 1rem 2rem;
+  color: white;
+}
+
+.navbar-left .logo {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-links li a {
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-links li.active a {
+  border-bottom: 2px solid white;
+}
+
+
+
+/* Main dashboard */
+.dashboard-content {
+  padding: 2rem;
+}
+
+.info-box {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  color: #171717;
+}
+
+/* Buttons */
+button {
+  display: block;
+  background-color: #0e508d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0b3c6c;
+}
+
+button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
