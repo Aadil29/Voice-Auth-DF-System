@@ -1,7 +1,8 @@
 const sampleWords = [
     "banana", "river", "laptop", "mirror", "coffee", "jungle",
-    "rocket", "yellow", "garden", "penguin", "bottle", "purple",
-    "guitar", "planet", "dragon", "kitten", "sunset", "forest"
+    "rocket", "yellow", "garden", "penguin", "car", "purple",
+    "guitar", "planet", "dragon", "kitten", "sunset", "forest",
+    "map","arsenal","liverpool","brighton","chelsea"
   ];
   
   export function generatePassphrase(count: number = 3): string {

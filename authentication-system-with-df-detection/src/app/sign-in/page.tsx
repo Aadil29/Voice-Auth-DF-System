@@ -64,14 +64,8 @@ export default function SignInPage() {
       </div>
   
       {/* Voice Auth Section Inside Form */}
-      <div className="voice-auth">
-        <p>Please say this phrase clearly:</p>
-        <div className="passphrase-box">{passphrase}</div>
-        <br />
-        <button type="button" onClick={() => setVoiceConfirmed(true)}>
-          Start Voice Authentication
-        </button>
-      </div>
+      <VoiceAuth passphrase={passphrase} onConfirm={(confirmed) => setVoiceConfirmed(confirmed)} />
+
   
       <button type="submit">Sign In</button>
   

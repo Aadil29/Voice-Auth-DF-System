@@ -313,3 +313,68 @@ button:disabled {
   background-color: #999;
   cursor: not-allowed;
 }
+
+
+
+/*voiceAuth sign in */
+
+.voice-auth {
+  margin-top: 2rem;
+  text-align: center;
+  color: #0e0e0e; /* Dark text for visibility */
+  
+  
+
+}
+
+
+.voice-auth button {
+  display: block;
+  margin: 1rem auto 0 auto; /* top, right, bottom, left */
+  background-color: #066b62;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.voice-auth button:hover {
+  background-color: #05574f;
+}
+
+.voice-auth h3 {
+  font-size: 1rem;
+  color: #0e508d; /* Consistent blue with brand */
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.voice-auth .passphrase-box {
+  background-color: #fff8f8;
+  color: #c62828;
+  border: 2px solid #c62828;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.voice-auth-feedback {
+  font-weight: bold;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.voice-auth-feedback.error {
+  color: #c62828; /* Strong red for failed */
+}
+
+.voice-auth-feedback.success {
+  color: #2e7d32; /* Green for success */
+}
+
+

@@ -43,30 +43,33 @@ export default function VoiceAuth({ passphrase, onConfirm }: VoiceAuthProps) {
   };
 
   return (
-    <div style={{ marginTop: "2rem" }}>
+    <div className="voice-auth">
       <h3>Please say this phrase clearly:</h3>
-      <p style={{ fontWeight: "bold", fontSize: "1.2rem" }}>{passphrase}</p>
-
+      <p className="passphrase-box">{passphrase}</p>
+  
       {status === "idle" && (
         <button onClick={handleVoiceAuth} disabled={loading}>
           Start Voice Authentication
         </button>
       )}
-
+  
       {status === "listening" && (
         <button disabled>Listening... (10 seconds)</button>
       )}
-
+  
       {status === "failed" && (
         <>
-          <p style={{ color: "red" }}>{text}</p>
+          <p className="voice-auth-feedback error">{text}</p>
           <button onClick={handleVoiceAuth} style={{ marginTop: "1rem" }}>
             Try Again
           </button>
         </>
       )}
-
-      {status === "confirmed" && <p style={{ color: "green" }}>{text}</p>}
+  
+      {status === "confirmed" && (
+        <p className="voice-auth-feedback success">{text}</p>
+      )}
     </div>
   );
 }
+  

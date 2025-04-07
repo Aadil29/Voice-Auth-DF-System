@@ -9,14 +9,14 @@ export default function SettingsPage() {
 
   const handleLogout = async () => {
     await signOut(auth);
-    router.push("/sign-in");
+    router.push("/");
   };
 
   const handleDelete = async () => {
     const user = auth.currentUser;
     if (user) {
       await deleteUser(user);
-      router.push("/sign-up");
+      router.push("/");
     }
   };
 

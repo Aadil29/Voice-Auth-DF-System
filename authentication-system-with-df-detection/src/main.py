@@ -1,10 +1,16 @@
-# main.py
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
-import speech_recognition as sr
+import whisper
+import sounddevice as sd
+import numpy as np
+import tempfile
+import scipy.io.wavfile
+import re
 
+# Initialise FastAPI app
 app = FastAPI()
 
+# Enable CORS (so frontend can call the backend)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -13,30 +19,43 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Load Whisper model (change to "tiny", "base", "small", or "large" if needed)
+model = whisper.load_model("medium")
+
+# Helper function to clean text (remove punctuation and lowercase)
+def clean_text(text: str) -> str:
+    return re.sub(r"[^\w\s]", "", text).lower().strip()
+
+# Listen and transcribe endpoint
 @app.get("/listen")
-def listen_once(passphrase: str = Query(...)):
-    recogniser = sr.Recognizer()
+def listen(passphrase: str = Query(...)):
+    duration = 7  # seconds
+    samplerate = 22050 
 
     try:
-        with sr.Microphone() as source:
-            print("Listening for 10 seconds...")
-            recogniser.adjust_for_ambient_noise(source)
-            audio = recogniser.listen(source, phrase_time_limit=10)
+        print("Recording...")
+        audio = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1, dtype='float32')
+        sd.wait()
 
-        text = recogniser.recognize_google(audio).lower()
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+            scipy.io.wavfile.write(f.name, samplerate, audio)
+            audio_path = f.name
 
-        # Save to output.txt
-        with open("output.txt", "a") as f:
-            f.write(text + "\n")
+        print("Transcribing...")
+        result = model.transcribe(audio_path)
+        raw_text = result["text"]
 
-        is_confirmed = passphrase.lower() in text
+        # Clean both transcribed text and passphrase for comparison
+        cleaned_text = clean_text(raw_text)
+        cleaned_passphrase = clean_text(passphrase)
 
+        is_confirmed = cleaned_passphrase in cleaned_text
+
+    
         return {
-            "text": text,
+            "text": raw_text,
             "confirmed": is_confirmed
         }
 
-    except sr.RequestError as e:
-        return {"error": f"API error: {e}"}
-    except sr.UnknownValueError:
-        return {"error": "Could not understand audio"}
+    except Exception as e:
+        return {"error": str(e)}
