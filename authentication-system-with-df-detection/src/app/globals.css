@@ -1,5 +1,3 @@
-
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -10,6 +8,36 @@
     --background: #0e508d;
     --foreground: #ededed;
   }
+}
+
+.homepage {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+.auth-box {
+  margin-top: 2rem;
+  display: inline-block;
+  padding: 2rem;
+  border: 2px solid #0e508d;
+  border-radius: 12px;
+  background-color: #f8f9fa;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.auth-link {
+  display: inline-block;
+  margin: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #0e508d;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.auth-link:hover {
+  background-color: #0b3c6c;
 }
 
 body {
@@ -23,15 +51,15 @@ button {
 }
 
 h1 {
-  font-size: 3rem; 
+  font-size: 3rem;
   font-weight: bold;
   text-align: center;
-  margin-top: 3rem; 
+  margin-top: 3rem;
   padding-top: 4rem;
 }
 
 h2 {
-  font-size: 1.25rem; 
+  font-size: 1.25rem;
   font-weight: bold;
   text-align: center;
   margin-top: 1rem;
@@ -44,7 +72,6 @@ h3 {
   margin-top: 0.5rem;
 }
 
-
 p {
   font-size: 1rem;
   font-weight: bold;
@@ -52,8 +79,6 @@ p {
   margin-top: 0.5rem;
   padding-top: 5rem;
 }
-
-
 
 /*sign up style */
 .signup-container {
@@ -69,11 +94,10 @@ p {
   border-radius: 12px;
   padding: 2rem 2.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  max-width: 350px; 
+  max-width: 350px;
   width: 100%;
 }
 
-/* Header */
 .signup-form h1 {
   font-size: 2rem;
   font-weight: 700;
@@ -82,12 +106,12 @@ p {
   margin-bottom: 2rem;
 }
 
-/* Input labels and fields */
 .signup-form label {
   display: block;
   font-weight: bold;
   margin-top: 1rem;
   margin-bottom: 0.25rem;
+  color: #000000;
 }
 
 .signup-form input {
@@ -99,7 +123,6 @@ p {
   box-sizing: border-box;
 }
 
-/* Sign Up button  */
 .signup-form button {
   width: 100%;
   margin-top: 2rem;
@@ -124,12 +147,6 @@ p {
   margin-top: 1rem;
 }
 
-
-
-
-
-
-/*signin */
 .auth-container {
   display: flex;
   justify-content: center;
@@ -147,7 +164,6 @@ p {
   width: 100%;
 }
 
-/* Header */
 .auth-form h1 {
   font-size: 2rem;
   font-weight: 700;
@@ -156,12 +172,12 @@ p {
   margin-bottom: 2rem;
 }
 
-/* Input labels and fields */
 .auth-form label {
   display: block;
   font-weight: bold;
   margin-top: 1rem;
   margin-bottom: 0.25rem;
+  color: #000000;
 }
 
 .auth-form input {
@@ -173,7 +189,6 @@ p {
   box-sizing: border-box;
 }
 
-/* Voice Auth Section */
 .voice-auth {
   margin-top: 2rem;
   text-align: center;
@@ -193,7 +208,6 @@ p {
   margin-bottom: 0.5rem;
 }
 
-/* Passphrase */
 .passphrase-box {
   background-color: #fff8f8;
   color: #c62828;
@@ -205,7 +219,6 @@ p {
   margin-bottom: 0.75rem;
 }
 
-/* Voice auth button */
 .voice-auth button {
   background-color: #066b62;
   color: white;
@@ -220,7 +233,6 @@ p {
   background-color: #05574f;
 }
 
-/* Sign In button */
 .auth-form button[type="submit"] {
   width: 100%;
   margin-top: 2rem;
@@ -245,7 +257,6 @@ p {
   margin-top: 1rem;
 }
 
-/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -277,9 +288,6 @@ p {
   border-bottom: 2px solid white;
 }
 
-
-
-/* Main dashboard */
 .dashboard-content {
   padding: 2rem;
 }
@@ -293,7 +301,6 @@ p {
   color: #171717;
 }
 
-/* Buttons */
 button {
   display: block;
   background-color: #0e508d;
@@ -314,23 +321,15 @@ button:disabled {
   cursor: not-allowed;
 }
 
-
-
-/*voiceAuth sign in */
-
 .voice-auth {
   margin-top: 2rem;
   text-align: center;
-  color: #0e0e0e; /* Dark text for visibility */
-  
-  
-
+  color: #0e0e0e;
 }
-
 
 .voice-auth button {
   display: block;
-  margin: 1rem auto 0 auto; /* top, right, bottom, left */
+  margin: 1rem auto 0 auto;
   background-color: #066b62;
   color: white;
   border: none;
@@ -346,7 +345,7 @@ button:disabled {
 
 .voice-auth h3 {
   font-size: 1rem;
-  color: #0e508d; /* Consistent blue with brand */
+  color: #0e508d;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
@@ -358,7 +357,7 @@ button:disabled {
   padding: 0.6rem 1rem;
   font-weight: bold;
   border-radius: 6px;
-  
+
   display: inline-block;
   margin-bottom: 0.75rem;
 }
@@ -370,11 +369,52 @@ button:disabled {
 }
 
 .voice-auth-feedback.error {
-  color: #c62828; /* Strong red for failed */
+  color: #c62828;
 }
 
 .voice-auth-feedback.success {
-  color: #2e7d32; /* Green for success */
+  color: #2e7d32;
 }
 
+.deepfake-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
 
+.file-input {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  width: 250px;
+  text-align: center;
+}
+
+.detect-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.detect-button:hover:not(:disabled) {
+  background-color: #1d4ed8;
+}
+
+.detect-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.result-text {
+  margin-top: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  color: #111827;
+  font-size: 1.125rem;
+}

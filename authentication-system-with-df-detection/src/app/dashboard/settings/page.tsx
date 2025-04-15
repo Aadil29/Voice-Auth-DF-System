@@ -1,8 +1,9 @@
 "use client";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
-import { auth } from "@/firebase";
 import { deleteUser, signOut } from "firebase/auth";
+import { deleteDoc, doc } from "firebase/firestore";
+import { auth, db } from "@/firebase";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -14,9 +15,23 @@ export default function SettingsPage() {
 
   const handleDelete = async () => {
     const user = auth.currentUser;
+
     if (user) {
-      await deleteUser(user);
-      router.push("/");
+      try {
+        const uid = user.uid;
+
+        await Promise.all([
+          deleteDoc(doc(db, "users", uid)),
+          deleteDoc(doc(db, "voiceEmbeddings", uid)),
+          deleteDoc(doc(db, "emailVerifications", uid)),
+        ]);
+
+        await deleteUser(user);
+
+        router.push("/");
+      } catch (err: any) {
+        console.error("Failed to delete user:", err.message);
+      }
     }
   };
 
