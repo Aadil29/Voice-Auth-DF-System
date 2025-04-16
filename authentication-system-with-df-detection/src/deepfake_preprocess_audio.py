@@ -3,7 +3,7 @@ import librosa
 import torch
 import torch.nn.functional as F
 
-def dfpreprocess_audio(y, sr, target_duration=6.0, apply_preemphasis=False, coef=0.5, normalise='rms'):
+def dfpreprocess_audio(y, sr=22050, target_duration=6.0, apply_preemphasis=False, coef=0.5, normalise='rms'):
     y, _ = librosa.effects.trim(y)
     if apply_preemphasis:
         y = librosa.effects.preemphasis(y, coef=coef)

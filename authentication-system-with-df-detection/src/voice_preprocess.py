@@ -5,7 +5,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-def preprocess_audio(y, sr, target_duration=6.0, apply_preemphasis=False, apply_reduction=False, coef=0.5, normalise='rms'):
+def preprocess_audio(y, sr=22050, target_duration=6.0, apply_preemphasis=False, apply_reduction=False, coef=0.5, normalise='rms'):
     
     y, _ = librosa.effects.trim(y)
 

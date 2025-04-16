@@ -1,17 +1,41 @@
-from fastapi import FastAPI, Query,File, UploadFile,File
+# FastAPI core
+from fastapi import FastAPI, Query, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+# Whisper & Audio I/O
 import whisper
 import sounddevice as sd
-import numpy as np
-import tempfile
 import scipy.io.wavfile
-import re
-import torch 
+import librosa
+import io
+import tempfile
 
+# Audio processing
+import numpy as np
+import torch
+import torch.nn.functional as F
 
-
+# Firebase
 import firebase_admin
 from firebase_admin import credentials, firestore
+
+# Deepfake detection
+from src.deepfake_audio import AudioDeepfakeFusionModel
+from src.deepfake_preprocess_audio import dfextract_features_from_audio, dfpreprocess_audio
+
+# Speaker verification
+from pyannote.audio import Audio
+from pyannote.audio.pipelines.speaker_verification import PretrainedSpeakerEmbedding
+from scipy.spatial.distance import cosine
+
+# Audio format conversion
+from pydub import AudioSegment
+
+# Utilities
+import re
+import os
+
 
 if not firebase_admin._apps:
     cred = credentials.Certificate("src/firebase-admin.json")
@@ -40,7 +64,7 @@ def clean_text(text: str) -> str:
 
 @app.get("/listen")
 def listen(passphrase: str = Query(...)):
-    duration = 5  
+    duration = 6  
     samplerate = 22050 
 
     try:
@@ -74,19 +98,8 @@ def listen(passphrase: str = Query(...)):
 
 
 
-from src.deepfake_audio import AudioDeepfakeFusionModel
-from src.deepfake_preprocess_audio import dfextract_features_from_audio, dfpreprocess_audio
-import torch.nn.functional as F
-
-
-
-import torch
-import librosa  
-import io
-import os
-
 model_df = AudioDeepfakeFusionModel()
-model_path = os.path.join(os.path.dirname(__file__), "df2_model.pth")
+model_path = os.path.join(os.path.dirname(__file__), "df3_model.pth")
 model_df.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 model_df.eval()
 
@@ -111,51 +124,82 @@ async def predict(file: UploadFile = File(...)):
             prob = output.item()
             label = "bonafide" if prob >= 0.5 else "spoof"
 
-        return {"prediction": label, "confidence": round(prob, 4)}
+        return {"prediction": label, "confidence": round(prob, 2)}
 
     except Exception as e:
         return {"error": f"Prediction failed: {str(e)}"}
 
 
+@app.post("/deepfake-auth-predict/")
+async def deepfake_auth_predict(file: UploadFile = File(...)):
+    try:
+        # Step 1: Save the uploaded .webm file temporarily
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_webm:
+            temp_webm.write(await file.read())
+            webm_path = temp_webm.name
+
+        wav_path = convert_webm_to_wav(webm_path)
+
+        # Step 3: Load and preprocess audio
+        y, sr = librosa.load(wav_path, sr=22050)
+        y = dfpreprocess_audio(y, sr)
+        features = dfextract_features_from_audio(y, sr)
+        if features is None:
+            return {"error": "Feature extraction failed."}
+
+        inputs = [features[k] for k in [
+            'mfcc', 'chroma', 'tonnetz', 'spectral_contrast', 'pitch',
+            'energy', 'zcr', 'onset_strength', 'spectral_centroid', 'mel_spectrogram'
+        ]]
+
+        with torch.no_grad():
+            output = model_df(*inputs)
+            prob = output.item()
+            label = "bonafide" if prob >= 0.5 else "spoof"
+
+        return {"prediction": label, "confidence": round(prob, 2)}
 
 
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
 
-import os
-import tempfile
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from fastapi.responses import JSONResponse
-from firebase_admin import firestore, credentials
-import firebase_admin
-from scipy.spatial.distance import cosine
-
-
+        return JSONResponse(
+            content={"error": f"Deepfake auth prediction failed: {str(e)}"},
+            status_code=500
+        )
 
 
-
-
-
-from pyannote.audio import Audio
-from pyannote.audio.pipelines.speaker_verification import PretrainedSpeakerEmbedding
-from scipy.spatial.distance import cosine
-import torchaudio
-import torch
-
+"""
 # Load speaker embedding model from Hugging Face
 model = PretrainedSpeakerEmbedding("pyannote/embedding", device="cpu")
 audio = Audio(sample_rate=16000)
+"""
+# New SpeechBrain ECAPA model
+from speechbrain.inference.speaker import SpeakerRecognition
+speaker_model = SpeakerRecognition.from_hparams(
+    source="pretrained_models/spkrec-ecapa-voxceleb"
+)
+
+
+import torchaudio
 
 def get_embedding(wav_path: str):
-    waveform, sample_rate = audio(wav_path)  
-    with torch.inference_mode():
-        embedding = model(waveform)
-    return embedding.squeeze().tolist()  
+    signal, fs = torchaudio.load(wav_path)
+    embedding = speaker_model.encode_batch(signal)
+    return embedding.squeeze().detach().cpu().numpy().tolist()
+
+
 
 from pydub import AudioSegment
 
 def convert_webm_to_wav(webm_path):
+    audio = AudioSegment.from_file(webm_path, format="webm")
+    audio = audio.set_channels(1).set_frame_rate(22050)
     wav_path = webm_path.replace(".webm", ".wav")
-    AudioSegment.from_file(webm_path, format="webm").export(wav_path, format="wav")
+    audio.export(wav_path, format="wav")
     return wav_path
+
 
 
 
@@ -177,6 +221,8 @@ async def extract_embedding(file: UploadFile = File(...)):
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
 
 def compare_embeddings(embedding1, embedding2, threshold=0.5):
     similarity = 1 - cosine(embedding1, embedding2)

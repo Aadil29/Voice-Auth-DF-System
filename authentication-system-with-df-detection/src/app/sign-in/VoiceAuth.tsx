@@ -28,23 +28,15 @@ export default function VoiceAuth({
       const audioChunks: BlobPart[] = [];
 
       mediaRecorder.ondataavailable = (event) => audioChunks.push(event.data);
+
       mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-
-        // FormData for both requests
         const formData = new FormData();
         formData.append("file", audioBlob, "sample.webm");
         formData.append("uid", uid);
 
-        const dfFormData = new FormData();
-        dfFormData.append("file", audioBlob, "sample.wav");
-
-        let voiceMatch = false;
-        let similarity = null;
-        let isBonafide = false;
-
         try {
-          // Voice embedding check
+          // 1. Speaker verification
           const verifyRes = await fetch(
             "http://localhost:8000/verify-embedding/",
             {
@@ -52,43 +44,40 @@ export default function VoiceAuth({
               body: formData,
             }
           );
-          const verifyResult = await verifyRes.json();
-          similarity = verifyResult.similarity;
+          const verifyData = await verifyRes.json();
 
-          voiceMatch = verifyResult.confirmed === true;
+          // 2. Deepfake prediction
+          const dfFormData = new FormData();
+          dfFormData.append("file", audioBlob, "sample.webm");
 
-          // Deepfake check
-          const dfRes = await fetch("http://localhost:8000/predict/", {
-            method: "POST",
-            body: dfFormData,
-          });
-          const dfResult = await dfRes.json();
+          const dfRes = await fetch(
+            "http://localhost:8000/deepfake-auth-predict/",
+            {
+              method: "POST",
+              body: dfFormData,
+            }
+          );
+          const dfData = await dfRes.json();
 
-          isBonafide = dfResult.prediction === "bonafide";
+          const spoofStatus = dfData.prediction === "spoof" ? "Fake" : "Real";
+          const spoofConfidence = dfData.confidence?.toFixed(2) ?? "N/A";
 
-          // Combined logic
-          if (voiceMatch && isBonafide) {
+          if (verifyData.confirmed && dfData.prediction === "bonafide") {
             setStatus("confirmed");
             setText(
-              `Voice matched (similarity: ${similarity?.toFixed(2)}), and audio is bonafide.`
+              `Voice verified \nSimilarity: ${verifyData.similarity.toFixed(2)}\nDeepfake: ${spoofStatus} (confidence ${spoofConfidence})`
             );
             onConfirm(true);
           } else {
             setStatus("failed");
-
-            const reasons = [];
-            if (!voiceMatch)
-              reasons.push(
-                `Voice mismatch (similarity: ${similarity?.toFixed(2)})`
-              );
-            if (!isBonafide) reasons.push(`Deepfake detected`);
-
-            setText(reasons.join(" | "));
+            setText(
+              `Voice verification failed \nSimilarity: ${verifyData.similarity?.toFixed(2) ?? "N/A"}\nDeepfake: ${spoofStatus} (confidence ${spoofConfidence})`
+            );
             onConfirm(false);
           }
         } catch (err) {
           setStatus("failed");
-          setText("Server error during verification.");
+          setText("Server error during voice authentication.");
           onConfirm(false);
         } finally {
           setLoading(false);
@@ -96,11 +85,9 @@ export default function VoiceAuth({
       };
 
       mediaRecorder.start();
-      setTimeout(() => {
-        mediaRecorder.stop();
-      }, 5000);
+      setTimeout(() => mediaRecorder.stop(), 6000);
     } catch (error) {
-      setText("Microphone access failed.");
+      setText("Microphone access denied.");
       setStatus("failed");
       onConfirm(false);
       setLoading(false);
@@ -122,7 +109,7 @@ export default function VoiceAuth({
 
       {status === "failed" && (
         <>
-          <p className="voice-auth-feedback error">{text}</p>
+          <pre className="voice-auth-feedback error">{text}</pre>
           <button
             onClick={handleVoiceAuth}
             style={{ marginTop: "1rem" }}
@@ -134,7 +121,7 @@ export default function VoiceAuth({
       )}
 
       {status === "confirmed" && (
-        <p className="voice-auth-feedback success">{text}</p>
+        <pre className="voice-auth-feedback success">{text}</pre>
       )}
     </div>
   );

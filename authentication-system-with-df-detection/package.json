@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "api": "C:/Users/Aadil/anaconda3/envs/voice-auth-project-env/python -m uvicorn src.main:app --reload",
+    "api": "C:/Users/Aadil/anaconda3/envs/final-voice-system-env/python -m uvicorn src.main:app --reload",
     "start-all": "concurrently \"npm run dev\" \"npm run api\"",
     "email": "email dev --dir src/app/emails"
   },

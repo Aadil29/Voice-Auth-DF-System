@@ -142,7 +142,7 @@ export default function SignUpPage() {
       setTimeout(() => {
         recorder.stop();
         setRecording(false);
-      }, 5000);
+      }, 6000);
     } catch (err) {
       setError("Microphone access is required.");
     }
