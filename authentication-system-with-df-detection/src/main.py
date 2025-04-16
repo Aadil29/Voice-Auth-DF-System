@@ -6,6 +6,7 @@ import numpy as np
 import tempfile
 import scipy.io.wavfile
 import re
+import torch 
 
 
 
@@ -107,7 +108,7 @@ async def predict(file: UploadFile = File(...)):
 
         with torch.no_grad():
             output = model_df(*inputs)
-            prob = torch.sigmoid(output).item()
+            prob = output.item()
             label = "bonafide" if prob >= 0.5 else "spoof"
 
         return {"prediction": label, "confidence": round(prob, 4)}
@@ -119,130 +120,102 @@ async def predict(file: UploadFile = File(...)):
 
 
 
-
+import os
 import tempfile
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.responses import JSONResponse
+from firebase_admin import firestore, credentials
+import firebase_admin
+from scipy.spatial.distance import cosine
+
+
+
+
+
+
+
+from pyannote.audio import Audio
+from pyannote.audio.pipelines.speaker_verification import PretrainedSpeakerEmbedding
+from scipy.spatial.distance import cosine
+import torchaudio
+import torch
+
+# Load speaker embedding model from Hugging Face
+model = PretrainedSpeakerEmbedding("pyannote/embedding", device="cpu")
+audio = Audio(sample_rate=16000)
+
+def get_embedding(wav_path: str):
+    waveform, sample_rate = audio(wav_path)  
+    with torch.inference_mode():
+        embedding = model(waveform)
+    return embedding.squeeze().tolist()  
+
 from pydub import AudioSegment
 
-from src.voice_preprocess import extract_features_from_audio, preprocess_audio
-from src.voice_audio import AudioFusionModel
+def convert_webm_to_wav(webm_path):
+    wav_path = webm_path.replace(".webm", ".wav")
+    AudioSegment.from_file(webm_path, format="webm").export(wav_path, format="wav")
+    return wav_path
 
 
-# Load model
-model_voice = AudioFusionModel()
-model_path_voice = os.path.join(os.path.dirname(__file__), "voice_model.pth")
-model_voice.load_state_dict(torch.load(model_path_voice, map_location=torch.device("cpu")))
-model_voice.eval()
+
 
 @app.post("/extract-embedding/")
 async def extract_embedding(file: UploadFile = File(...)):
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_webm:
             temp_webm.write(await file.read())
-            temp_webm.flush()
             webm_path = temp_webm.name
 
-        audio = AudioSegment.from_file(webm_path, format="webm")
-        wav_path = webm_path.replace(".webm", ".wav")
-        audio.export(wav_path, format="wav")
-
-        y, sr = librosa.load(wav_path, sr=16000)
-
-        y = preprocess_audio(y, sr)
-        features = extract_features_from_audio(y, sr)
-        if not features:
-            os.remove(webm_path)
-            os.remove(wav_path)
-            return JSONResponse(content={"error": "Feature extraction failed"}, status_code=400)
-
-        mel = features["mel_spectrogram"]
-        mfcc = features["mfcc"].squeeze(0)
-        chroma = features["chroma"].squeeze(0)
-        tonnetz = features["tonnetz"].squeeze(0)
-        contrast = features["spectral_contrast"].squeeze(0)
-
-        with torch.no_grad():
-            embedding = model_voice(
-                mel.unsqueeze(0),
-                mfcc.unsqueeze(0),
-                chroma.unsqueeze(0),
-                tonnetz.unsqueeze(0),
-                contrast.unsqueeze(0)
-            )
-
-        embedding_vector = embedding.squeeze().tolist()
+        wav_path = convert_webm_to_wav(webm_path)
+        embedding = get_embedding(wav_path)
 
         os.remove(webm_path)
         os.remove(wav_path)
 
-        return JSONResponse(content={"embedding": embedding_vector}, status_code=200)
+        return JSONResponse(content={"embedding": embedding}, status_code=200)
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+def compare_embeddings(embedding1, embedding2, threshold=0.5):
+    similarity = 1 - cosine(embedding1, embedding2)
+    return similarity, similarity >= threshold
 
-
-
-from fastapi import UploadFile, File, Form
-from firebase_admin import firestore
-from scipy.spatial.distance import cosine
 
 @app.post("/verify-embedding/")
 async def verify_embedding(file: UploadFile = File(...), uid: str = Form(...)):
     try:
         with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_file:
             temp_file.write(await file.read())
-            temp_file.flush()
             webm_path = temp_file.name
 
-        # Convert to .wav
-        audio = AudioSegment.from_file(webm_path, format="webm")
-        wav_path = webm_path.replace(".webm", ".wav")
-        audio.export(wav_path, format="wav")
+        wav_path = convert_webm_to_wav(webm_path)
+        new_embedding = get_embedding(wav_path)
 
-        y, sr = librosa.load(wav_path, sr=16000)
-        y = preprocess_audio(y, sr)
-        features = extract_features_from_audio(y, sr)
-        if not features:
-            return {"error": "Feature extraction failed"}
+        os.remove(webm_path)
+        os.remove(wav_path)
 
-        mel = features["mel_spectrogram"]
-        mfcc = features["mfcc"]
-        chroma = features["chroma"]
-        tonnetz = features["tonnetz"]
-        contrast = features["spectral_contrast"]
-
-        with torch.no_grad():
-            test_embedding = model_voice(
-                mel.unsqueeze(0),
-                mfcc.unsqueeze(0),
-                chroma.unsqueeze(0),
-                tonnetz.unsqueeze(0),
-                contrast.unsqueeze(0)
-            ).squeeze().numpy()
-
-        doc_ref = firestore.client().collection("voiceEmbeddings").document(uid)
-        doc = doc_ref.get()
+        doc = firestore.client().collection("voiceEmbeddings").document(uid).get()
         if not doc.exists:
-            return {"error": "User voice not found"}
+            raise HTTPException(status_code=404, detail="User embedding not found.")
 
-        saved_embedding = doc.to_dict().get("embedding")
-        if not saved_embedding:
-            return {"error": "Stored embedding missing"}
+        stored_embedding = doc.to_dict().get("embedding")
+        if not stored_embedding:
+            raise HTTPException(status_code=404, detail="Stored embedding is missing.")
 
-        # Cosine similarity
-        similarity = 1 - cosine(test_embedding, saved_embedding)
-        confirmed = bool(similarity >= 0.8)
+        similarity, confirmed = compare_embeddings(new_embedding, stored_embedding)
+        
+        similarity = float(similarity)
+        confirmed = bool(confirmed)
 
 
         return {
             "similarity": similarity,
-            "confirmed": confirmed,
-            "test_embedding": test_embedding.tolist(),
-            "saved_embedding": saved_embedding
+            "confirmed": confirmed
         }
 
 
     except Exception as e:
-        return {"error": str(e)}
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+

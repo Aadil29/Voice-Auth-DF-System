@@ -39,8 +39,10 @@ def pad_or_resize(tensor, target_shape=(128, 259)):
 
     if h > target_shape[0] or w > target_shape[1]:
         tensor = tensor[:min(h, target_shape[0]), :min(w, target_shape[1])]
-
     return F.pad(torch.tensor(tensor, dtype=torch.float32), (0, pad_w, 0, pad_h)).unsqueeze(0)
+
+
+
 def extract_features_from_audio(y, sr, mel_shape=(128, 259)):
     try:
         features_raw = {
