@@ -109,8 +109,8 @@ async def predict(file: UploadFile = File(...)):
         audio_bytes = await file.read()
         y, sr = librosa.load(io.BytesIO(audio_bytes), sr=22050)
 
-        y = dfpreprocess_audio(y, sr)
-        features = dfextract_features_from_audio(y, sr)
+        y = dfpreprocess_audio(y, sr=22050, target_duration=6.0, apply_preemphasis=False, coef=0.5, normalise='rms')
+        features = dfextract_features_from_audio(y, sr, target_shape=(128, 259))
         if features is None:
             return {"error": "Feature extraction failed."}
 
@@ -130,44 +130,63 @@ async def predict(file: UploadFile = File(...)):
         return {"error": f"Prediction failed: {str(e)}"}
 
 
+
+
 @app.post("/deepfake-auth-predict/")
 async def deepfake_auth_predict(file: UploadFile = File(...)):
     try:
-        # Step 1: Save the uploaded .webm file temporarily
+        # 1. Save uploaded .webm to temp file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_webm:
             temp_webm.write(await file.read())
             webm_path = temp_webm.name
 
+        # 2. Convert to WAV
         wav_path = convert_webm_to_wav(webm_path)
 
-        # Step 3: Load and preprocess audio
+        # 3. Load and preprocess
         y, sr = librosa.load(wav_path, sr=22050)
-        y = dfpreprocess_audio(y, sr)
-        features = dfextract_features_from_audio(y, sr)
+        y = dfpreprocess_audio(
+            y,
+            sr=22050,
+            target_duration=6.0,
+            apply_preemphasis=False,
+            coef=0.5,
+            normalise="rms"
+        )
+
+        # 4. Extract features
+        features = dfextract_features_from_audio(y, sr, target_shape=(128, 259))
         if features is None:
             return {"error": "Feature extraction failed."}
 
-        inputs = [features[k] for k in [
-            'mfcc', 'chroma', 'tonnetz', 'spectral_contrast', 'pitch',
-            'energy', 'zcr', 'onset_strength', 'spectral_centroid', 'mel_spectrogram'
-        ]]
+        inputs = [
+            features["mfcc"],
+            features["chroma"],
+            features["tonnetz"],
+            features["spectral_contrast"],
+            features["pitch"],
+            features["energy"],
+            features["zcr"],
+            features["onset_strength"],
+            features["spectral_centroid"],
+            features["mel_spectrogram"],
+        ]
 
+        # 5. Inference
+        model_df.eval()
         with torch.no_grad():
             output = model_df(*inputs)
-            prob = output.item()
+            prob = torch.sigmoid(output).item()
             label = "bonafide" if prob >= 0.5 else "spoof"
 
         return {"prediction": label, "confidence": round(prob, 2)}
 
-
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-
         return JSONResponse(
             content={"error": f"Deepfake auth prediction failed: {str(e)}"},
             status_code=500
         )
+
 
 
 """
@@ -175,7 +194,6 @@ async def deepfake_auth_predict(file: UploadFile = File(...)):
 model = PretrainedSpeakerEmbedding("pyannote/embedding", device="cpu")
 audio = Audio(sample_rate=16000)
 """
-# New SpeechBrain ECAPA model
 from speechbrain.inference.speaker import SpeakerRecognition
 speaker_model = SpeakerRecognition.from_hparams(
     source="pretrained_models/spkrec-ecapa-voxceleb"
@@ -224,7 +242,7 @@ async def extract_embedding(file: UploadFile = File(...)):
 
 
 
-def compare_embeddings(embedding1, embedding2, threshold=0.5):
+def compare_embeddings(embedding1, embedding2, threshold=0.7):
     similarity = 1 - cosine(embedding1, embedding2)
     return similarity, similarity >= threshold
 
@@ -264,4 +282,6 @@ async def verify_embedding(file: UploadFile = File(...), uid: str = Form(...)):
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
 
