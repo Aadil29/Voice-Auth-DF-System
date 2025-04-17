@@ -53,6 +53,9 @@ export default function DeepfakeDetectionPage() {
         <h3 className="text-md mb-6 text-gray-700">
           Attach the audio file you want to test to see if it is a deepfake.
         </h3>
+        <h3>
+          Must be in .WAV format, if not use online convertor to convert to .WAV
+        </h3>
 
         <div className="deepfake-form">
           <input
@@ -75,4 +78,3 @@ export default function DeepfakeDetectionPage() {
     </>
   );
 }
-

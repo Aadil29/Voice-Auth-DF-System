@@ -27,7 +27,7 @@ export default function SignUpPage() {
   const [userUID, setUserUID] = useState<string | null>(null);
 
   const voicePrompt =
-    "Please say the following: 'Audio Shield protects your voice.'";
+    "Please say the following in a conversatioanl tone: 'My name is [say name], and Audio Shield secure's and protect's your voice.'";
 
   const getSpeakerEmbedding = async (
     audioBlob: Blob
@@ -262,6 +262,17 @@ export default function SignUpPage() {
             </button>
           </div>
         )}
+
+        <span
+          style={{
+            color: "#0e508d",
+            textDecoration: "underline",
+            cursor: "pointer",
+          }}
+          onClick={() => router.push("/sign-in")}
+        >
+          Sign In
+        </span>
 
         {error && <p className="error-message">{error}</p>}
       </form>

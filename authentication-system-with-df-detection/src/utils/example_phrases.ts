@@ -1,18 +1,57 @@
-/*
 const sampleWords = [
-    "banana", "river", "laptop", "mirror", "coffee", "jungle"
+  "banana",
+  "river",
+  "laptop",
+  "mirror",
+  "coffee",
+  "jungle",
+  "shadow",
+  "pencil",
+  "rocket",
+  "garden",
+  "thunder",
+  "cloud",
+  "window",
+  "candle",
+  "mountain",
+  "whisper",
+  "ocean",
+  "storm",
+  "planet",
+  "sunset",
+  "blanket",
+  "library",
+  "bottle",
+  "glasses",
+  "forest",
+  "pillow",
+  "umbrella",
+  "wallet",
+  "button",
+  "camera",
+  "island",
+  "notebook",
+  "lantern",
+  "snowflake",
+  "airplane",
+  "diamond",
+  "kitchen",
+  "violin",
+  "carpet",
+  "penguin",
+  "teacup",
+  "backpack",
+  "drawer",
+  "eraser",
+  "helmet",
+  "jacket",
+  "ladder",
+  "necklace",
+  "quartz",
+  "zebra",
+];
 
-  ];
-  
-  export function generatePassphrase(count: number = 5): string {
-    const shuffled = sampleWords.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count).join(" ");
-  }
-
-  */
-
-  export function generatePassphrase(): string {
-    return "my name is muhammad aadi ghani this is audio shield";
-  }
-  
-  
+export function generatePassphrase(count: number = 5): string {
+  const shuffled = [...sampleWords].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count).join(" ");
+}

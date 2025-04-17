@@ -59,7 +59,6 @@ export default function SignInPage() {
     <main className="auth-container">
       <form onSubmit={handleSubmit} className="auth-form">
         <h1>Sign In</h1>
-
         <div>
           <label htmlFor="email">Email</label>
           <input
@@ -71,7 +70,6 @@ export default function SignInPage() {
             required
           />
         </div>
-
         <div>
           <label htmlFor="password">Password</label>
           <div style={{ position: "relative" }}>
@@ -119,7 +117,6 @@ export default function SignInPage() {
             </button>
           </div>
         </div>
-
         {uid && (
           <VoiceAuth
             uid={uid}
@@ -127,9 +124,18 @@ export default function SignInPage() {
             onConfirm={(confirmed) => setVoiceConfirmed(confirmed)}
           />
         )}
-
         <button type="submit">Sign In</button>
 
+        <span
+          style={{
+            color: "#0e508d",
+            textDecoration: "underline",
+            cursor: "pointer",
+          }}
+          onClick={() => router.push("/sign-up")}
+        >
+          Sign up
+        </span>
         {error && <p className="error-message">{error}</p>}
       </form>
     </main>

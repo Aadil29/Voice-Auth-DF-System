@@ -25,8 +25,6 @@ from src.deepfake_audio import AudioDeepfakeFusionModel
 from src.deepfake_preprocess_audio import dfextract_features_from_audio, dfpreprocess_audio
 
 # Speaker verification
-from pyannote.audio import Audio
-from pyannote.audio.pipelines.speaker_verification import PretrainedSpeakerEmbedding
 from scipy.spatial.distance import cosine
 
 # Audio format conversion
@@ -99,7 +97,7 @@ def listen(passphrase: str = Query(...)):
 
 
 model_df = AudioDeepfakeFusionModel()
-model_path = os.path.join(os.path.dirname(__file__), "df3_model.pth")
+model_path = os.path.join(os.path.dirname(__file__), "df_model.pth")
 model_df.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 model_df.eval()
 
@@ -189,16 +187,11 @@ async def deepfake_auth_predict(file: UploadFile = File(...)):
 
 
 
-"""
-# Load speaker embedding model from Hugging Face
-model = PretrainedSpeakerEmbedding("pyannote/embedding", device="cpu")
-audio = Audio(sample_rate=16000)
-"""
+
 from speechbrain.inference.speaker import SpeakerRecognition
 speaker_model = SpeakerRecognition.from_hparams(
     source="pretrained_models/spkrec-ecapa-voxceleb"
 )
-
 
 import torchaudio
 
