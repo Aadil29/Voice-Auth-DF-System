@@ -22,7 +22,7 @@ cd Voice-Auth-DF-System
 
 ### 1. Install Conda
 
-Download and install Conda for your system by following the instructions here:  
+Download and install Conda for your system by following the instructions here (download the distribution version):  
 [Conda Installation Guide](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
 
 ### 2. Create and Activate Conda Environment
