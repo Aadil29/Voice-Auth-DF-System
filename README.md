@@ -18,7 +18,7 @@ cd Voice-Auth-DF-System
 
 ---
 
-## ⚙Environment Setup
+## Environment Setup
 
 ### 1. Install Conda
 
@@ -67,7 +67,7 @@ python -m ipykernel install --user --name final-voice-system-env --display-name 
 
 ---
 
-## 🖥Open in VS Code
+## Open in VS Code
 
 1. Open the project folder in Visual Studio Code.
 2. Press `Ctrl + Shift + P` and select **"Python: Select Interpreter"**.
@@ -87,7 +87,7 @@ Ensure the following scripts are correctly set in your `package.json`:
 }
 ```
 
-*Note: Adjust the Python path as per your system if it differs.*
+
 
 ---
 
