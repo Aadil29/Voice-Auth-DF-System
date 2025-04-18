@@ -97,7 +97,7 @@ def listen(passphrase: str = Query(...)):
 
 
 model_df = AudioDeepfakeFusionModel()
-model_path = os.path.join(os.path.dirname(__file__), "df_model.pth")
+model_path = os.path.join(os.path.dirname(__file__), "pth_models", "df_model.pth")
 model_df.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 model_df.eval()
 

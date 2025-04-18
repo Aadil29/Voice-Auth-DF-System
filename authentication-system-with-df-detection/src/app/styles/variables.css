@@ -1,0 +1,35 @@
+:root {
+  --col-bg: #222831;
+  --col-fg: #000000;
+  --col-primary: #00adb5;
+  --col-primary-10: #eeeeee;
+  --col-primary-80: #393e46;
+
+  --col-error: #c62828;
+  --col-success: #2e7d32;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  --font-base: "Arial", "Helvetica", sans-serif;
+  --fs-base: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 2.5rem;
+}
+
+@media (prefers-colour-scheme: dark) {
+  :root {
+    --col-bg-dark: #393e46;
+    --col-bg-secondary: #222831;
+    --col-accent: #00adb5;
+    --col-bg-light: #eeeeee;
+  }
+}

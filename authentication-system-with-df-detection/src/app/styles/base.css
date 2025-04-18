@@ -1,0 +1,21 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--col-bg);
+  colour: var(--col-fg);
+  font-family: var(--font-base);
+  font-size: var(--fs-base);
+  line-height: 1.5;
+}
+a {
+  text-decoration: none;
+  colour: inherit;
+}

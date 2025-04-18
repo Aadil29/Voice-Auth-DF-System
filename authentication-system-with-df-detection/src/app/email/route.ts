@@ -13,7 +13,6 @@ export async function POST(request: Request) {
         <p>Hi <strong>${email}</strong>,</p>
         <p>Your 6‑digit verification code is:</p>
         <h1 style="color: #0F172A;">${code}</h1>
-        <p>This code is valid for <strong>10 minutes</strong>.</p>
         <br/>
         <small style="color: grey;">
           If you didn’t request this, you can ignore this message.

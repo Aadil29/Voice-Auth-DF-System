@@ -65,17 +65,17 @@ export default function SettingsPage() {
     <>
       <Navbar />
       <main className="dashboard-content">
-        <h2>Settings</h2>
-
-        <button onClick={handleLogout} disabled={busy}>
+        <button onClick={handleLogout} disabled={busy} className="btn-sm">
           Log Out
         </button>
-
-        <button onClick={handleDelete} disabled={busy}>
+        <button onClick={handleDelete} disabled={busy} className="btn-sm">
           Delete Account
         </button>
-
-        <button onClick={handlePasswordReset} disabled={busy}>
+        <button
+          onClick={handlePasswordReset}
+          disabled={busy}
+          className="btn-sm"
+        >
           Change Password
         </button>
 

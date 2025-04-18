@@ -47,7 +47,7 @@ export default function OTPInputComponent({ email }: Props) {
 
   return (
     <div style={{ marginTop: "1rem" }}>
-      <h2>Enter the code sent to your email</h2>
+      <h3>Enter the code sent to your email</h3>
       <input
         type="text"
         placeholder="6-digit code"

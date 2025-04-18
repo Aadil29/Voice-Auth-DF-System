@@ -1,0 +1,32 @@
+h1 {
+  font-size: var(--fs-xl);
+  font-weight: bold;
+  color: var(--col-primary-10);
+  padding-bottom: 20px;
+}
+h2 {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+}
+h3 {
+  font-size: var(--fs-base);
+  font-weight: 600;
+  color: black;
+  text-align: center;
+  pad: 10px;
+}
+
+h4 {
+  font-size: medium;
+  font-weight: bold;
+  color: var(--col-primary-10);
+  padding-bottom: 20px;
+}
+p {
+  font-size: var(--fs-base);
+  font-weight: 500;
+  color: black;
+  padding: 10px;
+}

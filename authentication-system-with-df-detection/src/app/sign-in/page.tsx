@@ -7,6 +7,7 @@ import { auth } from "@/firebase";
 import VoiceAuth from "@/app/sign-in/VoiceAuth";
 import { generatePassphrase } from "@/utils/example_phrases";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Link from "next/link";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -126,16 +127,12 @@ export default function SignInPage() {
         )}
         <button type="submit">Sign In</button>
 
-        <span
-          style={{
-            color: "#0e508d",
-            textDecoration: "underline",
-            cursor: "pointer",
-          }}
-          onClick={() => router.push("/sign-up")}
-        >
-          Sign up
-        </span>
+        <Link href="/sign-up" className="back-home-link">
+          Sign Up
+        </Link>
+        <Link href="/" className="back-home-link">
+          Back to Home
+        </Link>
         {error && <p className="error-message">{error}</p>}
       </form>
     </main>

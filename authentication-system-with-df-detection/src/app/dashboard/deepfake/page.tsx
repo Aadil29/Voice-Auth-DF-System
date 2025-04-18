@@ -49,11 +49,8 @@ export default function DeepfakeDetectionPage() {
     <>
       <Navbar />
       <main className="dashboard-content p-4">
-        <h2 className="text-xl font-bold mb-2">Deepfake Detection</h2>
-        <h3 className="text-md mb-6 text-gray-700">
+        <h3 className="info-box">
           Attach the audio file you want to test to see if it is a deepfake.
-        </h3>
-        <h3>
           Must be in .WAV format, if not use online convertor to convert to .WAV
         </h3>
 

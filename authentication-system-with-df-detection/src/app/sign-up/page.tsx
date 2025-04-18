@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/firebase";
 import { doc, setDoc, serverTimestamp, getDoc } from "firebase/firestore";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Link from "next/link";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function SignUpPage() {
   const [userUID, setUserUID] = useState<string | null>(null);
 
   const voicePrompt =
-    "Please say the following in a conversatioanl tone: 'My name is [say name], and Audio Shield secure's and protect's your voice.'";
+    "Please say the following in a conversatioanl tone: 'My name is [say name], and Audio Shield secure's and protects your voice.'";
 
   const getSpeakerEmbedding = async (
     audioBlob: Blob
@@ -87,7 +88,7 @@ export default function SignUpPage() {
         createdAt: serverTimestamp(),
       });
 
-      await fetch("/api/email", {
+      await fetch("/email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, code }),
@@ -194,9 +195,8 @@ export default function SignUpPage() {
                 cursor: "pointer",
                 color: "black",
               }}
-            >
-              {show ? <FaEyeSlash /> : <FaEye />}
-            </button>
+            ></button>
+            {show ? <FaEyeSlash /> : <FaEye />}
           </div>
         </div>
 
@@ -250,7 +250,7 @@ export default function SignUpPage() {
 
         {otpSent && (
           <div className="otp-section">
-            <h2>Enter the 6-digit code sent to {email}</h2>
+            <h4>Enter the 6-digit code sent to {email}</h4>
             <input
               type="text"
               placeholder="Verification Code"
@@ -263,16 +263,12 @@ export default function SignUpPage() {
           </div>
         )}
 
-        <span
-          style={{
-            color: "#0e508d",
-            textDecoration: "underline",
-            cursor: "pointer",
-          }}
-          onClick={() => router.push("/sign-in")}
-        >
+        <Link href="/sign-in" className="back-home-link">
           Sign In
-        </span>
+        </Link>
+        <Link href="/" className="back-home-link">
+          Back to Home
+        </Link>
 
         {error && <p className="error-message">{error}</p>}
       </form>

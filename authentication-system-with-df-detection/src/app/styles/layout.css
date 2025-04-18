@@ -1,0 +1,11 @@
+.flex-centre {
+  display: flex;
+  align-items: centre;
+  justify-content: centre;
+}
+
+.container {
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: var(--space-md);
+}

@@ -1,0 +1,27 @@
+.mt-1 {
+  margin-top: var(--space-sm);
+}
+.mt-2 {
+  margin-top: var(--space-md);
+}
+.mb-1 {
+  margin-bottom: var(--space-sm);
+}
+
+.text-centre {
+  text-align: centre;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-sm {
+  width: 200px;
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--fs-sm);
+  border-radius: var(--radius-sm);
+  display: block;
+  margin: var(--space-xs) auto;
+}
