@@ -1,75 +1,116 @@
+
+---
+
 # Voice-Auth-DF-System
 
-A secure voice authentication system with deepfake audio detection.
+A secure voice authentication system with deepfake audio detection using FastAPI, PyTorch, and Whisper. This project supports real-time voice-based login with spoof detection, integrated with Firebase for authentication and Whisper for transcription.
 
-first clone the repo to tyour desired locatrion:
-    git clone https://github.com/Aadil29/Voice-Auth-DF-System.git
-    
-Enviroment setup
-conda
-foolwo the steps here to donald and istnall conda for your system.
-https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
+---
 
-the env for the place is.
+## Clone the Repository
 
-create a env in conda callewd final-voice-system-env
+First, clone the repository to your desired location:
 
-  conda create -n final-voice-system-env python=3.10 -y
+```bash
+git clone https://github.com/Aadil29/Voice-Auth-DF-System.git
+cd Voice-Auth-DF-System
+```
 
-activaet this with 
-  conda activate final-voice-system-env
+---
 
-  then run these comands:
+## ⚙Environment Setup
+
+### 1. Install Conda
+
+Download and install Conda for your system by following the instructions here:  
+[Conda Installation Guide](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+
+### 2. Create and Activate Conda Environment
+
+```bash
+conda create -n final-voice-system-env python=3.10 -y
+conda activate final-voice-system-env
+```
+
+### 3. Install Required Dependencies
+
+Run the following commands to install the necessary packages:
+
+```bash
+# PyTorch with CUDA
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 
-pip install fastapi uvicorn
-pip install "python-multipart"
-pip install pydantic
-pip install aiofiles
+# FastAPI and related libraries
+pip install fastapi uvicorn python-multipart pydantic aiofiles
 
-pip install numpy torch librosa sounddevice scipy pydub
+# Audio processing and ML libraries
+pip install numpy librosa sounddevice scipy pydub noisereduce ipywidgets
 
+# Whisper for transcription
 pip install git+https://github.com/openai/whisper.git
 
+# Firebase integration
 pip install firebase-admin
 
+# PyAnnote for speaker embeddings
 pip install pyannote.audio
 
-pip install "python-dotenv" python-decouple
-pip install requests
+# Environment configuration
+pip install python-dotenv python-decouple requests
+```
 
-pip install librosa 
-pip install noisereduce
-pip install ipywidgets
+### 4. Add Kernel for Jupyter (Optional)
+
+```bash
+python -m ipykernel install --user --name final-voice-system-env --display-name "Python (final-voice-system-env)"
+```
+
+---
+
+## 🖥Open in VS Code
+
+1. Open the project folder in Visual Studio Code.
+2. Press `Ctrl + Shift + P` and select **"Python: Select Interpreter"**.
+3. Choose the `final-voice-system-env` environment.
+
+---
+
+## Verify `package.json` Scripts
+
+Ensure the following scripts are correctly set in your `package.json`:
+
+```json
+"scripts": {
+  "api": "C:/Users/Aadil/anaconda3/envs/final-voice-system-env/python -m uvicorn src.main:app --reload",
+  "start-all": "concurrently \"npm run dev\" \"npm run api\"",
+  "email": "email dev --dir src/app/emails"
+}
+```
+
+*Note: Adjust the Python path as per your system if it differs.*
+
+---
+
+## Run the Project
+
+Open a terminal in the project directory and run:
+
+```bash
+cd authentication-system-with-df-detection
+npm run start-all
+```
+
+This will start both the frontend and backend servers.
+
+---
+
+## Access the App
+
+Once the servers are running, open the local URL displayed in your terminal. You should now be able to use the voice authentication system.
+
+---
 
 
-python -m ipykernel install --user --name final-voice-system-env  --display-name "Python (final-voice-system-env)
-
-
-now you shodu lbe abel to open the repo in vscode
-
-then press crtl shift p  and slect the env we just created
-
-
-double check to ensure this is the ois in the josn package under scripts:
-
-"api": "C:/Users/Aadil/anaconda3/envs/final-voice-system-env/python -m uvicorn src.main:app --reload",
-    "start-all": "concurrently \"npm run dev\" \"npm run api\"",
-    "email": "email dev --dir src/app/emails"
-
-
-
-then to run the projecm open teh termoanl in the prikect fdodelr,
-  cd authentication-system-with-df-detection
-  npm run start-all
-
-this shodu lload up the sver and mail and lcoal host
-
-open the local host tjat appars and you hodu be good to go!
-
-
-
-workign microhope:
 
 dataset set up/ downloads
 
