@@ -2,8 +2,7 @@
 
 A secure voice authentication system with deepfake audio detection.
 
-Envioment setup
-
+Enviroment setup
 conda:
 
 cuda:
