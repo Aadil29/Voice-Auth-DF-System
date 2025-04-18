@@ -70,13 +70,16 @@ export default function SettingsPage() {
         </button>
         <button onClick={handleDelete} disabled={busy} className="btn-sm">
           Delete Account
+          <h5>All personal data is deleted from the database</h5>
         </button>
+
         <button
           onClick={handlePasswordReset}
           disabled={busy}
           className="btn-sm"
         >
           Change Password
+          <h5>Email will be sent</h5>
         </button>
 
         {message && <p className="success-message">{message}</p>}
