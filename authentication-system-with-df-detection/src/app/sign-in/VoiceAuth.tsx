@@ -14,13 +14,13 @@ import { useState } from "react";
 interface VoiceAuthProps {
   uid: string; // User ID used to retrieve their stored voice embedding
   passphrase: string; // Random passphrase the user must read aloud
-  onConfirm: (confirmed: boolean) => void; // Callback to inform parent whether auth was successful
+  onConfirmAction: (confirmed: boolean) => void; // Callback to inform parent whether auth was successful
 }
 
 export default function VoiceAuth({
   uid,
   passphrase,
-  onConfirm,
+  onConfirmAction,
 }: VoiceAuthProps) {
   const [text, setText] = useState(""); // Text to show result or errors
   const [loading, setLoading] = useState(false); // Controls button loading state
@@ -82,20 +82,20 @@ export default function VoiceAuth({
             setText(
               `Voice verified \nSimilarity: ${verifyData.similarity.toFixed(2)}\nDeepfake: ${spoofStatus} (confidence ${spoofConfidence})`
             );
-            onConfirm(true);
+            onConfirmAction(true);
           } else {
             // One or both checks failed
             setStatus("failed");
             setText(
               `Voice verification failed \nSimilarity: ${verifyData.similarity?.toFixed(2) ?? "N/A"}\nDeepfake: ${spoofStatus} (confidence ${spoofConfidence})`
             );
-            onConfirm(false);
+            onConfirmAction(false);
           }
         } catch (err) {
           // Server call failed
           setStatus("failed");
           setText("Server error during voice authentication.");
-          onConfirm(false);
+          onConfirmAction(false);
         } finally {
           setLoading(false);
         }
@@ -108,7 +108,7 @@ export default function VoiceAuth({
       // User denied microphone or another failure
       setText("Microphone access denied.");
       setStatus("failed");
-      onConfirm(false);
+      onConfirmAction(false);
       setLoading(false);
     }
   };
