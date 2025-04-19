@@ -256,4 +256,4 @@ https://www.kaggle.com/datasets/awsaf49/asvpoof-2019-dataset
 
 # Project folder structure
 
-![alt text](image.png)
+![alt text](image-1.png)
