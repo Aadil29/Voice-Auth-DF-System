@@ -230,7 +230,7 @@ https://deepfake-total.com/in_the_wild
 
 ### 2. VoxCeleb1 (~60GB)
 
-This dataset needs to be requested so you need to provide the following details.(You must downald all 4(ABCD) parts and then concoate them togterh to be abel to take a sample from it) download the test dataset if you want to test.
+This dataset needs to be requested so you need to provide the following details.(You must downald all 4(ABCD) parts and then concoate them togterh to be abel to take a sample from it) download the test dataset if you want to test. Place it in voice-auth-df-system/ml-modles/datasets/
 
 Firstname, Surname, Affilicaion, Email
 
@@ -240,7 +240,7 @@ https://cn01.mmai.io/keyreq/voxceleb
 
 ### 3. Fake Or Real dataset (for-2sec) (~25GB)
 
-Used the sub set in the fake or real dataset for evaluation purposes for deepfake detection. Only the for-2sec directory was used, but you still need to download entire dataset.
+Used the sub set in the fake or real dataset for evaluation purposes for deepfake detection. Only the for-2sec directory was used, but you still need to download entire dataset. Place it in voice-auth-df-system/ml-modles/datasets/evaluation
 
 ```bash
 [https://cn01.mmai.io/keyreq/voxceleb](https://www.kaggle.com/datasets/mohammedabdeldayem/the-fake-or-real-dataset)
@@ -248,7 +248,7 @@ Used the sub set in the fake or real dataset for evaluation purposes for deepfak
 
 ### 4. ASVspoof2019 dataset (LA_eval) (~22GB)
 
-Used for evaluation for deepfake detection.Only used the LA_eval for evaluation
+Used for evaluation for deepfake detection.Only used the LA_eval for evaluation. Place it in voice-auth-df-system/ml-modles/datasets/evaluation
 
 ```bash
 https://www.kaggle.com/datasets/awsaf49/asvpoof-2019-dataset
