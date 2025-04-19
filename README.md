@@ -160,18 +160,21 @@ authentication-system-with-df-detection/
 ---
 
 
-### test. Add deepfake model weights to pth_models folder
+### 7. Add deepfake model weights to pth_models folder
 
-The file is alrady in the 
+download this file then unzip and create pth_models in `authentication-system-with-df-detection/src/`
 
-### 7. Add Kernel for Jupyter
+```bash
+[python -m ipykernel install --user --name final-voice-system-env --display-name "Python (final-voice-system-env)"](https://drive.google.com/file/d/1oP-NXYggC-HDATSESRr3Fhxs9WrCK9sF/view?usp=sharing)
+```
+### 8. Add Kernel for Jupyter
 
 ```bash
 python -m ipykernel install --user --name final-voice-system-env --display-name "Python (final-voice-system-env)"
 ```
 
 
-### 8. Add Environment Variables
+### 9. Add Environment Variables
 
 In the `authentication-system-with-df-detection/` directory, create a `.env.local` file.
 
@@ -179,7 +182,7 @@ Populate it with the necessary Firebase and backend environment variables. These
 
 ---
 
-### 9. Verify `package.json` Scripts and project folder
+### 10. Verify `package.json` Scripts and project folder
 
 Ensure your `package.json` includes the following scripts:
 
@@ -196,7 +199,7 @@ Ensure your `package.json` includes the following scripts:
 
 ---
 
-### 10. Run the Project
+### 11. Run the Project
 
 Open a terminal in the root project directory and run:
 
@@ -209,7 +212,7 @@ This will start both the **FastAPI backend** and the **Next.js frontend** concur
 
 ---
 
-### 11. Access the website
+### 12. Access the website
 
 Once both servers are running:
 
