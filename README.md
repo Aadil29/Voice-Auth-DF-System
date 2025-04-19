@@ -171,7 +171,7 @@ python -m ipykernel install --user --name final-voice-system-env --display-name 
 ```
 
 
-## Add Environment Variables
+### 8. Add Environment Variables
 
 In the `authentication-system-with-df-detection/` directory, create a `.env.local` file.
 
@@ -179,7 +179,7 @@ Populate it with the necessary Firebase and backend environment variables. These
 
 ---
 
-### 8. Verify `package.json` Scripts
+### 9. Verify `package.json` Scripts and project folder
 
 Ensure your `package.json` includes the following scripts:
 
@@ -187,13 +187,16 @@ Ensure your `package.json` includes the following scripts:
    "api": "python -m uvicorn src.main:app --reload",
     "start-all": "concurrently \"npm run dev\" \"npm run api\"",
     "email": "email dev --dir src/app/emails"
+
 ```
+![Screenshot 2025-04-19 024621](https://github.com/user-attachments/assets/8b54ccde-4c64-45a9-afb7-d0e86653ef0a) : ![Screenshot 2025-04-19 024841](https://github.com/user-attachments/assets/095ebd05-efa4-4f7c-972f-03bd78c736b3)
+
 
 > You may need to update the `"api"` path if your Python environment is located elsewhere on macOS or Linux.
 
 ---
 
-### 9. Run the Project
+### 10. Run the Project
 
 Open a terminal in the root project directory and run:
 
@@ -206,7 +209,7 @@ This will start both the **FastAPI backend** and the **Next.js frontend** concur
 
 ---
 
-### 10. Access the website
+### 11. Access the website
 
 Once both servers are running:
 
