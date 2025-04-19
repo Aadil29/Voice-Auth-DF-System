@@ -48,11 +48,11 @@ conda activate final-voice-system-env
 ---
 
 ### 2.3 Install Required Dependencies, ensure you are in the correct conda enviorment(conda activate final-voice-system-env)
+## GPU USAGE - READ FIRST!!!, do not install unless your NVIDIA GPU supports this version specific version of cuda (cuda v12.2), and you have set it up correctly (https://www.youtube.com/watch?v=nATRPPZ5dGE&ab_channel=DSwithBappy)
 
 Run the following commands in anaconda prompt or terminal, read before running **with your Conda environment activated**:
 
-GPU USAGE - READ FIRST!!!, do not install unless your NVIDIA GPU supports this version specific version of cuda (cuda v12.2), and you have set it up correctly (https://www.youtube.com/watch?v=nATRPPZ5dGE&ab_channel=DSwithBappy)
-
+GPU USAGE
 ```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
