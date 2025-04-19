@@ -1,4 +1,14 @@
+/* 
+  This page allows the logged-in user to:
+  - Log out of their account
+  - Delete their account and all related data from Firestore
+  - Request a password reset email
+
+  The buttons are disabled while actions are in progress, and success/error messages are displayed accordingly.
+*/
+
 "use client";
+
 import { useState } from "react";
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from "next/navigation";
@@ -8,30 +18,32 @@ import { auth, db } from "@/firebase";
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null); // Stores success message
+  const [error, setError] = useState<string | null>(null); // Stores error message
+  const [busy, setBusy] = useState(false); // Disables buttons while processing
 
   const handleLogout = async () => {
-    await signOut(auth);
-    router.push("/");
+    await signOut(auth); // Sign out the user from Firebase
+    router.push("/"); // Redirect to homepage after logout
   };
 
   const handleDelete = async () => {
     const user = auth.currentUser;
     if (!user) return;
+
     try {
-      setBusy(true);
+      setBusy(true); // Lock UI while deletion is in progress
       const uid = user.uid;
 
+      // Delete all Firestore records associated with the user
       await Promise.all([
         deleteDoc(doc(db, "users", uid)),
         deleteDoc(doc(db, "voiceEmbeddings", uid)),
         deleteDoc(doc(db, "emailVerifications", uid)),
       ]);
 
-      await deleteUser(user);
-      router.push("/");
+      await deleteUser(user); // Delete user account from Firebase Auth
+      router.push("/"); // Redirect to homepage after deletion
     } catch (err: any) {
       console.error("Failed to delete user:", err);
       setError("Could not delete account. Please try again.");
@@ -42,16 +54,18 @@ export default function SettingsPage() {
 
   const handlePasswordReset = async () => {
     const user = auth.currentUser;
+
     if (!user?.email) {
       setError("No email on file for current user.");
       return;
     }
+
     try {
       setBusy(true);
       setError(null);
       setMessage(null);
 
-      await sendPasswordResetEmail(auth, user.email);
+      await sendPasswordResetEmail(auth, user.email); // Send password reset email
       setMessage("Password reset email sent. Check your inbox.");
     } catch (err: any) {
       console.error("Password reset failed:", err);
@@ -69,6 +83,7 @@ export default function SettingsPage() {
           Log Out
           <h5></h5>
         </button>
+
         <button onClick={handleDelete} disabled={busy} className="btn-sm">
           Delete Account
           <h5>All personal data is deleted from the database</h5>
@@ -83,6 +98,7 @@ export default function SettingsPage() {
           <h5>Email will be sent</h5>
         </button>
 
+        {/* Show a success or error message if applicable */}
         {message && <p className="success-message">{message}</p>}
         {error && <p className="error-message">{error}</p>}
       </main>

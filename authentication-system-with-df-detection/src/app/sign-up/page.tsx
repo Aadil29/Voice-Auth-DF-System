@@ -1,4 +1,14 @@
+/* 
+  This page handles user registration using email, password, and voice.
+  Steps include:
+  - Email/password account creation (Firebase Auth)
+  - Voice recording for speaker embedding (sent to backend for feature extraction)
+  - OTP email verification using Brevo API
+  - Account is only considered valid once both voice and OTP verification pass
+*/
+
 "use client";
+
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -9,12 +19,15 @@ import Link from "next/link";
 
 export default function SignUpPage() {
   const router = useRouter();
+
+  // Form inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false); // Toggle for password visibility
   const [error, setError] = useState("");
 
+  // Voice registration state
   const [showVoiceReg, setShowVoiceReg] = useState(false);
   const [recording, setRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
@@ -23,13 +36,15 @@ export default function SignUpPage() {
     null
   );
 
+  // OTP verification
   const [otpSent, setOtpSent] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [userUID, setUserUID] = useState<string | null>(null);
 
   const voicePrompt =
-    "Please say the following in a conversatioanl tone: 'My name is [say name], and Audio Shield secure's and protects your voice.'";
+    "Please say the following in a conversational tone: 'My name is [say name], and Audio Shield secures and protects your voice.'";
 
+  // Send voice to backend to extract speaker embedding
   const getSpeakerEmbedding = async (
     audioBlob: Blob
   ): Promise<number[] | null> => {
@@ -55,6 +70,7 @@ export default function SignUpPage() {
     }
   };
 
+  // Handles full registration process
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
@@ -76,11 +92,13 @@ export default function SignUpPage() {
       if (!embedding)
         return setError("Failed to process voice. Please try again.");
 
+      // Save voice embedding
       await setDoc(doc(db, "voiceEmbeddings", uid), {
         embedding,
         createdAt: serverTimestamp(),
       });
 
+      // Generate and store OTP
       const code = Math.floor(100000 + Math.random() * 900000).toString();
       await setDoc(doc(db, "emailVerifications", uid), {
         code,
@@ -88,6 +106,7 @@ export default function SignUpPage() {
         createdAt: serverTimestamp(),
       });
 
+      // Send OTP via email
       await fetch("/email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -100,6 +119,7 @@ export default function SignUpPage() {
     }
   };
 
+  // Verifies the OTP entered by the user
   const verifyCode = async () => {
     if (!userUID) return setError("User ID not found.");
 
@@ -123,6 +143,7 @@ export default function SignUpPage() {
     }
   };
 
+  // Records 6 seconds of audio using MediaRecorder API
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -133,7 +154,7 @@ export default function SignUpPage() {
       recorder.onstop = () => {
         const blob = new Blob(audioChunks, { type: "audio/webm" });
         setAudioBlob(blob);
-        setAudioURL(URL.createObjectURL(blob));
+        setAudioURL(URL.createObjectURL(blob)); // For playback preview
       };
 
       recorder.start();
@@ -149,6 +170,7 @@ export default function SignUpPage() {
     }
   };
 
+  // Allows user to discard recording and start over
   const reRecord = () => {
     setAudioBlob(null);
     setAudioURL(null);
@@ -182,22 +204,23 @@ export default function SignUpPage() {
               required
               style={{ paddingRight: "2rem" }}
             />
-            <button
-              type="button"
-              onClick={() => setShow(!show)}
-              style={{
-                position: "absolute",
-                right: "0.5rem",
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                color: "black",
-              }}
-            ></button>
-            {show ? <FaEyeSlash /> : <FaEye />}
           </div>
+          <button
+            type="button"
+            onClick={() => setShow(!show)}
+            style={{
+              position: "absolute",
+              right: "0.5rem",
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "black",
+            }}
+          >
+            {show ? <FaEyeSlash /> : <FaEye />}
+          </button>
         </div>
 
         <div>
@@ -210,6 +233,7 @@ export default function SignUpPage() {
           />
         </div>
 
+        {/* Show voice registration only when form is valid */}
         {!showVoiceReg &&
           email &&
           password &&
@@ -220,6 +244,7 @@ export default function SignUpPage() {
             </button>
           )}
 
+        {/* Record and preview voice sample */}
         {showVoiceReg && !otpSent && (
           <div className="voice-registration">
             <p>{voicePrompt}</p>
@@ -248,6 +273,7 @@ export default function SignUpPage() {
           </div>
         )}
 
+        {/* OTP confirmation input */}
         {otpSent && (
           <div className="otp-section">
             <h4>Enter the 6-digit code sent to {email}</h4>
