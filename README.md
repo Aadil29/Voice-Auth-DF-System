@@ -8,11 +8,11 @@ A secure voice authentication system with deepfake audio detection. This project
 
 ![Screenshot 2025-04-19 151923](https://github.com/user-attachments/assets/752c0612-4e95-41a1-a254-90979ed255a6)
 
-![Screenshot 2025-04-19 151949](https://github.com/user-attachments/assets/686aaf59-b9b3-42a5-a3bd-dfbe56317c1b)
 
-## Clone the Repository
 
-First, clone the repository to your desired location:
+## Clone the Repository !!!!!
+
+First, clone the repository to your desired location use term:
 
 ```bash
 git clone https://github.com/Aadil29/Voice-Auth-DF-System.git
