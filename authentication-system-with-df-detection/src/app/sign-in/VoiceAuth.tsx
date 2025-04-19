@@ -115,7 +115,7 @@ export default function VoiceAuth({
 
   return (
     <div className="voice-auth">
-      <h3>Please say this phrase clearly:</h3>
+      <h3>Please say these phrases in a conversational tone:</h3>
       <p className="passphrase-box">{passphrase}</p>
 
       {status === "idle" && (

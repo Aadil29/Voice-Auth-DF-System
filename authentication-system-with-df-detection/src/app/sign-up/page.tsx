@@ -42,7 +42,7 @@ export default function SignUpPage() {
   const [userUID, setUserUID] = useState<string | null>(null);
 
   const voicePrompt =
-    "Please say the following in a conversational tone: 'My name is [say name], and Audio Shield secures and protects your voice.'";
+    "Please say the following in a conversational tone: ''' My name is [say full name], and Audio Shield secures and protects your voice.''' ";
 
   // Send voice to backend to extract speaker embedding
   const getSpeakerEmbedding = async (
