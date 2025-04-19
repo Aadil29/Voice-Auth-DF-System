@@ -54,7 +54,7 @@ conda activate final-voice-system-env
 
 ---
 
-### 3. Install Required Dependencies
+### 3. Install Required Dependencies, ensure you are in the correct conda enviorment(conda activate final-voice-system-env)
 
 Run the following commands, read before running **with your Conda environment activated**:
 
@@ -62,52 +62,40 @@ GPU USAGE - READ FIRST, do not install unless your nvidea GPU supports this vers
 ```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
+Required install
 
 ```bash
+conda install -c conda-forge ffmpeg
+npm install next react react-dom
 pip install fastapi uvicorn python-multipart pydantic aiofiles
 pip install numpy librosa sounddevice scipy pydub noisereduce ipywidgets
 pip install git+https://github.com/openai/whisper.git
 pip install firebase-admin
 pip install python-dotenv python-decouple requests
 pip install speechbrain
+npm install nodemailer
+npm install --save-dev @types/nodemailer
+npm install concurrently --save-dev
+pip install ipykernel
+python -m ipykernel install --user --name final-voice-system-env --display-name "Python (final-voice-system-env)"
 ```
 
----
 
-### 4. FFmpeg Installation
+Install node js
 
-#### Windows:
+### 4. Open the cloned repository in VS Code
 
-Download and extract FFmpeg from this link:  
-[FFmpeg Windows Build](https://github.com/BtbN/FFmpeg-Builds/releases/tag/autobuild-2025-01-31-12-58)
-
-
-#### macOS:
-
-```bash
-conda install -c conda-forge ffmpeg
-```
-
----
-
-### 5. Open the Project in VS Code
-
+1. Open vs code 
 1. Open the project folder (`Voice-Auth-DF-System`) in Visual Studio Code.
-2. In the terminal inside VS Code, run:
 
-   ```bash
-   conda activate final-voice-system-env
-   ```
 
-3. Install frontend email dependencies (decice wheneter in cd auth voice system or root of clone i.e in voice auth ):
+go to authecntio-sywetm-with0df-dertetion in termail in trhe porject and do :
 
-   ```bash
-   npm install nodemailer
-   npm install --save-dev @types/nodemailer
-   npm install concurrently --save-dev
-   ```
+Install node js
+https://nodejs.org/en
+npm install
 
-4. For Jupyter notebooks and python interpreter setup:
+5. For Jupyter notebooks and python interpreter setup:
 
    - Open a notebook.
    - In the top-right, select the Python interpreter.
@@ -123,21 +111,18 @@ conda install -c conda-forge ffmpeg
 ### 6. Download Pretrained Speaker Recognition Model
 
 1. Follow instructions from Hugging Face to install `git-lfs`:
-   ```bash
-   brew install git-lfs  # macOS
-   git lfs install
-   ```
+   in active conda envioremtn run:
 
-   ```bash
-   https://git-lfs.com/  #download and run this, ensure to choose windows
-   git lfs install
-   ```
+   conda install anaconda::git-lfs
+
+
    Should see "Git LFS initialized" 
 
-2. Then clone the pretrained model into the pretrained models folder
+3. Then clone the pretrained model into the pretrained models folder in the vscode termainl 
 
    ```bash
-    cd/authentication-system-with-df-detection/pretrained_models:
+   mkdir -p authentication-system-with-df-detection/pretrained_models
+
    ```
 
    ```bash
@@ -152,20 +137,22 @@ authentication-system-with-df-detection/
     └── spkrec-ecapa-voxceleb/
 ```
 
+
 ---
 
 
-### 7. Add deepfake model weights to pth_models folder
+### 7. Add deepfake detection  model weights to pth_models folder
 
-download this file then unzip and create pth_models in `authentication-system-with-df-detection/src/`
+create pth_modle fodler. run this in project terminal:
 
 ```bash
-[python -m ipykernel install --user --name final-voice-system-env --display-name "Python (final-voice-system-env)"](https://drive.google.com/file/d/1oP-NXYggC-HDATSESRr3Fhxs9WrCK9sF/view?usp=sharing)
+mkdir authentication-system-with-df-detection/src/pth_models
 ```
-### 8. Add Kernel for Jupyter
+
+Download the file from this link, and unzip and move it into the  pth_models folder 
 
 ```bash
-python -m ipykernel install --user --name final-voice-system-env --display-name "Python (final-voice-system-env)"
+(https://drive.google.com/file/d/1oP-NXYggC-HDATSESRr3Fhxs9WrCK9sF/view?usp=sharing)
 ```
 
 
@@ -200,6 +187,8 @@ Ensure your `package.json` includes the following scripts:
 ### 11. Run the Project
 
 Open a terminal in the root project directory and run:
+run this in case of erros in poer shell as admin, and press y when prometed : Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
 
 ```bash
 cd authentication-system-with-df-detection
