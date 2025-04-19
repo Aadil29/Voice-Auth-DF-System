@@ -181,6 +181,8 @@ In the `authentication-system-with-df-detection/` directory, create a `.env.loca
 Populate it with the necessary Firebase and backend environment variables. These are not included in the repo for security reasons.
 https://drive.google.com/file/d/1oP-NXYggC-HDATSESRr3Fhxs9WrCK9sF/view?usp=sharing
 
+You will see this warning, but its completly safe, so dont worry: 'Google Drive can't scan this file for viruses.'
+
 ---
 
 ### 10. Verify `package.json` Scripts and project folder
