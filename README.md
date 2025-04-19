@@ -79,7 +79,7 @@ pip install ipykernel
 python -m ipykernel install --user --name final-voice-system-env --display-name "Python (final-voice-system-env)"
 ```
 ###POSSIBLE ERROR
-if you get a warnign about conflcitn nupy version, unstill and re install this version
+If you get a warning about conflication numpy version, uninstill and re install this version, using the following command
 
 ```bash
 pip uninstall numpy -y
@@ -150,7 +150,7 @@ https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb
 ---
 
 
-### 4. Add deepfake detection model weights to pth_models folder
+## 4. Add deepfake detection model weights to pth_models folder
 
 4.1 create pth_modle fodler. run this in project terminal:
 
@@ -167,7 +167,7 @@ You will see this warning ('Google Drive can't scan this file for viruses.'), bu
 ```
 
 
-### 5. Add Environment Variables
+## 5. Add Environment Variables
 
 5.1 Create a .ene.local file in the `authentication-system-with-df-detection/` directory, create a `.env.local` file.
 Then populate it with the necessary Firebase and email environment variables. These are not included in the repo for security reasons.These will be sent via secure communication 
@@ -198,7 +198,7 @@ Ensure your `package.json` includes the following scripts:
 
 ---
 
-### 6. Run the Project
+## 6. Run the Project
 
 Open a terminal in the root project directory and run:
 
@@ -212,7 +212,7 @@ This will start both the frontend and the backend concurrently.
 
 ---
 
-### 7. Access the website
+## 7. Access the website
 
 Once both servers are running:
 
@@ -223,9 +223,15 @@ You are now ready to test the real-time voice authentication system with deepfak
 
 ---
 
+## 8. ---------------------------------KEY TESTING INFOMATION---------------------------------
 
-## Datasets Download 
-If you wish to download the datasets to be able to run the code in the jupyter notebooks, be prearped to download around 100GB worth of files, (Only 20GB is actually used)
+## It could be useful to temporarily reduce the similarity threshold (e.g. to 0.4) when testing the authentication mechanism. Since complete access is necessary after re#gistering before you may explore the dashboard features or remove your account and related personal data, this makes it easier for you to have access during initial testing.
+
+## By lowering the threshold, you can test and preview every part of the system, including the usage guidelines, account management, and deepfake detection findings. After functionality has been confirmed, you can gradually raise the threshold to assess how robust and dependable the system gets at higher levels. This helps in assessing the system's resilience to false positives and overall robustness.
+
+
+# Datasets Download 
+If you wish to download the datasets to be able to run the code in the jupyter notebooks, be prepared to download around 150GB worth of files, (Only 20GB is actually used)
 
 ### 1. Release in the wild dataset (~7.6GB)
 
