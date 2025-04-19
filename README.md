@@ -11,8 +11,8 @@ A secure voice authentication system with deepfake audio detection. This project
 
 
 ## Clone the Repository !!!!!
-
-First, clone the repository to your desired location use term:
+Enure you have git installed for your system, https://git-scm.com/downloads
+First, clone the repository to your desired location, idealy desktop for convicne use terminal or command prompt:
 
 ```bash
 git clone https://github.com/Aadil29/Voice-Auth-DF-System.git
@@ -29,9 +29,10 @@ cd Voice-Auth-DF-System
 
 ### 1. Install Conda
 
-Download and install Conda for your system by following the instructions here (use the **distribution version**):  
+Download and install Conda for your system(wiundows or mac)by following the instructions here (use the **Anaconda distribution version**) :  
 [Conda Installation Guide](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
 
+Run the rest in anaconda prompt for windows or terminal for mac os
 After installation, run:
 
 ```bash
@@ -55,28 +56,19 @@ conda activate final-voice-system-env
 
 ### 3. Install Required Dependencies
 
-Run the following commands **with your Conda environment activated**:
+Run the following commands, read before running **with your Conda environment activated**:
+
+GPU USAGE - READ FIRST, do not install unless your nvidea GPU supports this version of cuda
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
 
 ```bash
-# PyTorch with CUDA - IF YOUR GPU HAS THE MATCHING CUDA COMPATABILITY(helps to speed up training and testing)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-
-# FastAPI and related libraries
 pip install fastapi uvicorn python-multipart pydantic aiofiles
-
-# Audio processing and ML libraries
 pip install numpy librosa sounddevice scipy pydub noisereduce ipywidgets
-
-# Whisper for transcription
 pip install git+https://github.com/openai/whisper.git
-
-# Firebase integration
 pip install firebase-admin
-
-# Environment configuration
 pip install python-dotenv python-decouple requests
-
-# SpeechBrain (Speaker Recognition)
 pip install speechbrain
 ```
 
