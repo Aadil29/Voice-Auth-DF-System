@@ -76,7 +76,7 @@ def listen(passphrase: str = Query(...)):
 
         print("Transcribing...")
         result = model.transcribe(audio_path)
-        raw_text = result["text"]
+        raw_text = result["text", ""]
 
         cleaned_text = clean_text(raw_text)
         cleaned_passphrase = clean_text(passphrase)

@@ -67,7 +67,7 @@ export default function SettingsPage() {
       <main className="dashboard-content">
         <button onClick={handleLogout} disabled={busy} className="btn-sm">
           Log Out
-          <h5>All personal data is deleted from the database</h5>
+          <h5></h5>
         </button>
         <button onClick={handleDelete} disabled={busy} className="btn-sm">
           Delete Account
