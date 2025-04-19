@@ -179,6 +179,7 @@ python -m ipykernel install --user --name final-voice-system-env --display-name 
 In the `authentication-system-with-df-detection/` directory, create a `.env.local` file.
 
 Populate it with the necessary Firebase and backend environment variables. These are not included in the repo for security reasons.
+https://drive.google.com/file/d/1oP-NXYggC-HDATSESRr3Fhxs9WrCK9sF/view?usp=sharing
 
 ---
 
