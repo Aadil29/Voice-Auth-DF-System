@@ -59,7 +59,7 @@ const sampleWords = [
   "Shield",
 ];
 
-export function generatePassphrase(count: number = 5): string {
+export function generatePassphrase(count: number = 6): string {
   // Shuffle the word list randomly
   const shuffled = [...sampleWords].sort(() => 0.5 - Math.random());
 
