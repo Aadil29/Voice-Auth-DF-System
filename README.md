@@ -2,7 +2,7 @@
 
 A secure voice authentication system with deepfake audio detection. This project supports real-time voice-based login with spoof detection, integrated with Firebase for authentication and Whisper for transcription for speech independant verification and authentication.
 
-![Screenshot 2025-04-19 151923](https://github.com/user-attachments/assets/752c0612-4e95-41a1-a254-90979ed255a6)
+![image](https://github.com/user-attachments/assets/1d7ecefd-e468-4eba-b747-141eb8b5fe6c)
 
 
 ## Table of Contents
