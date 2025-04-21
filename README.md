@@ -43,8 +43,6 @@ conda create -n final-voice-system-env python=3.10.16 -y
 conda activate final-voice-system-env
 ```
 
-> _(Note: version `3.10.16` can be adjusted if needed — still under test for compatibility.)_
-
 ---
 
 ### 2.3 Install Required Dependencies, ensure you are in the correct conda enviorment(conda activate final-voice-system-env)
@@ -69,11 +67,13 @@ pip install git+https://github.com/openai/whisper.git
 pip install firebase-admin
 pip install python-dotenv python-decouple requests
 pip install speechbrain
+pip install slowapi redis
 npm install nodemailer
 npm install --save-dev @types/nodemailer
 npm install concurrently --save-dev
 pip install ipykernel
 python -m ipykernel install --user --name final-voice-system-env --display-name "Python (final-voice-system-env)"
+
 ```
 
 ###POSSIBLE ERROR
