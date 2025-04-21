@@ -50,7 +50,7 @@ git clone https://github.com/Aadil29/Voice-Auth-DF-System.git
 conda create -n final-voice-system-env python=3.10.16 -y
 ```
 
-## In terminal or anaconda prompt actiavte conda enviroment and install the following dependencies 
+### In terminal or anaconda prompt actiavte conda enviroment and install the following dependencies 
 
 Activate conda enviroment
 
@@ -89,7 +89,8 @@ pip install numpy==1.24.4
 
 ### Pytorch Installation  
 
-Nvidia GPU USAGE ONLY: 
+Nvidia GPU USAGE ONLY:
+
 Do not install unless your NVIDIA GPU supports cuda v12.2, and you have set cuda up correctly - https://www.youtube.com/watch?v=nATRPPZ5dGE&ab_channel=DSwithBappy.
 But ensure to use this version of cuda https://developer.nvidia.com/cuda-12-2-0-download-archive. Once all that is doen you can run the command below
 
@@ -106,10 +107,10 @@ pip3 install torch torchvision torchaudio
 
 
 
-### 2.4 Open the cloned repository (Voice-auth-df-system) in VS Code
+### 2.2 Open the cloned repository (Voice-auth-df-system) in VS Code
 
 
-### 2.5 Python interpreter and Jupyter notebook setup
+### 2.3 Python interpreter and Jupyter notebook setup
 
 1. Open a Jupyter notebook from the following direcotry voice-auth-df-system/ml-model/.
 2. In the top-right, select the Python interpreter.
@@ -177,7 +178,7 @@ https://drive.google.com/file/d/1oP-NXYggC-HDATSESRr3Fhxs9WrCK9sF/view?usp=shari
 echo > authentication-system-with-df-detection/.env.local
 ```
 Populate it with the necessary Firebase and email environment variables. These are not included in the repo for security reasons.These will be sent via secure communication
----
+
 
 
 ## 6. Run the Project
@@ -213,10 +214,11 @@ You are now ready to test the real-time voice authentication system with deepfak
 
 If you wish to download the datasets to be able to run the code in the jupyter notebooks, be prepared to download around 150GB worth of files, (Only 20GB is actually used)
 
-### 1. Release in the wild dataset (~7.6GB)
+### 1. Release in the wild dataset (~7.6GB) - 
 
-Go to the webiste and select download dataset, then extract and place it in voice-auth-df-system/ml-modles/datasets/
+Go to the website and select download dataset, then extract and place it in voice-auth-df-system/ml-modles/datasets/
 
+This is dataset is needed to run the deepfake-detection jupyter notebook 
 ```bash
 https://deepfake-total.com/in_the_wild
 ```
@@ -225,7 +227,10 @@ https://deepfake-total.com/in_the_wild
 
 This dataset needs to be requested so you need to provide the following details.(You must downald all 4(ABCD) parts and then concoate them togterh to be abel to take a sample from it) download the test dataset if you want to test. Place it in voice-auth-df-system/ml-modles/datasets/
 
-Firstname, Surname, Affilicaion, Email
+
+Firstname, Surname, Affilicaion, Email seatila weill be rewuired to downlaid it.
+
+This is dataset is needed to run the voice-identification jupyter notebook 
 
 ```bash
 https://cn01.mmai.io/keyreq/voxceleb
@@ -235,14 +240,16 @@ https://cn01.mmai.io/keyreq/voxceleb
 
 Used the sub set in the fake or real dataset for evaluation purposes for deepfake detection. Only the for-2sec directory was used, but you still need to download entire dataset. Place it in voice-auth-df-system/ml-modles/datasets/evaluation
 
+This is dataset is needed to run the EVALUATING ON NEW DATASETS section of the deepfake-detection jupyter notebook 
 ```bash
 [https://cn01.mmai.io/keyreq/voxceleb](https://www.kaggle.com/datasets/mohammedabdeldayem/the-fake-or-real-dataset)
 ```
 
 ### 4. ASVspoof2019 dataset (LA_eval) (~22GB)
 
-Used for evaluation for deepfake detection.Only used the LA_eval for evaluation. Place it in voice-auth-df-system/ml-modles/datasets/evaluation
+Used for evaluation for deepfake detection.Only used the LA_eval for evaluation. Place it in voice-auth-df-system/ml-modles/datasets/evaluation.
 
+This is dataset is needed to run the EVALUATING ON NEW DATASETS section of the deepfake-detection jupyter notebook 
 ```bash
 https://www.kaggle.com/datasets/awsaf49/asvpoof-2019-dataset
 ```
@@ -251,6 +258,8 @@ https://www.kaggle.com/datasets/awsaf49/asvpoof-2019-dataset
 
 
 # Project folder structure
+
+### For datasets, the only base folders are there, meaning; vox1_subset was created via code in the notebbok, so do not make folders, the code will run and make what is need, as long as youi have the base datastes in teh correct location. 
 
 ![image](https://github.com/user-attachments/assets/8dedb2ca-4a35-4e85-864f-b86c3245f81b)
 
