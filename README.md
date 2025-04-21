@@ -92,7 +92,7 @@ pip install numpy==1.24.4
 Nvidia GPU USAGE ONLY: 
 Do not install unless your NVIDIA GPU supports cuda v12.2, and you have set cuda up correctly - https://www.youtube.com/watch?v=nATRPPZ5dGE&ab_channel=DSwithBappy.
 But ensure to use this version of cuda https://developer.nvidia.com/cuda-12-2-0-download-archive. Once all that is doen you can run the command below
-- 
+
 ```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 ```
@@ -205,9 +205,9 @@ You are now ready to test the real-time voice authentication system with deepfak
 
 # 8. ---------------------------------KEY TESTING INFOMATION---------------------------------
 
-## It could be useful to temporarily reduce the similarity threshold (e.g. to 0.4) when testing the authentication mechanism. Since complete access is necessary after registering before you may explore the dashboard features or remove your account and related personal data, this makes it easier for you to have access during initial testing.
+### It could be useful to temporarily reduce the similarity threshold (e.g. to 0.4) when testing the authentication mechanism. Since complete access is necessary after registering before you may explore the dashboard features or remove your account and related personal data, this makes it easier for you to have access during initial testing.
 
-## By lowering the threshold, you can test and preview every part of the system, including the usage guidelines, account management, and deepfake detection findings. After functionality has been confirmed, you can gradually raise the threshold to assess how robust and dependable the system gets at higher levels. This helps in assessing the system's resilience to false positives and overall robustness.
+### By lowering the threshold, you can test and preview every part of the system, including the usage guidelines, account management, and deepfake detection findings. After functionality has been confirmed, you can gradually raise the threshold to assess how robust and dependable the system gets at higher levels. This helps in assessing the system's resilience to false positives and overall robustness.
 
 # Datasets Download
 
