@@ -1,6 +1,6 @@
 # Voice Authentication System With Deepfake Detection
 
-A secure voice authentication system with deepfake audio detection. This project supports real-time voice-based login with spoof detection, integrated with Firebase for authentication and Whisper for transcription for speech independant verification and authentication.
+A secure voice authentication system with audio deepfake  detection.
 
 ![image](https://github.com/user-attachments/assets/1d7ecefd-e468-4eba-b747-141eb8b5fe6c)
 
@@ -34,7 +34,7 @@ A secure voice authentication system with deepfake audio detection. This project
 
 
 ## 1. In Terminal Or Command Prompt Clone the Repository.
-Ensure you know where you have cloned the repository, it may be easier to navigate to the desktop using cd and clone the project there
+Ensure you know where you have cloned the repository, it may be easier to navigate to the desktop using cd and clone the project in that location
 
 ```bash
 git clone https://github.com/Aadil29/Voice-Auth-DF-System.git
@@ -50,7 +50,7 @@ git clone https://github.com/Aadil29/Voice-Auth-DF-System.git
 conda create -n final-voice-system-env python=3.10.16 -y
 ```
 
-### In terminal or anaconda prompt actiavte conda enviroment and install the following dependencies 
+### In terminal or anaconda prompt, actiavte conda enviroment and install the following dependencies 
 
 Activate conda enviroment
 
@@ -112,11 +112,11 @@ pip3 install torch torchvision torchaudio
 
 ### 2.3 Python interpreter and Jupyter notebook setup
 
-1. Open a Jupyter notebook from the following direcotry voice-auth-df-system/ml-model/.
+1. Open a Jupyter notebook from the following directory voice-auth-df-system/ml-model/
 2. In the top-right, select the Python interpreter.
 3. If prompted, install Jupyter-related extensions.
 4. Select the interpreter: `Python (final-voice-system-env)`.
-5. in the search  '>Python: select interpreter' in porject search, and ensure 'final-voice-system-env' is selected
+5. In the search  '>Python: select interpreter' in project search, and ensure 'final-voice-system-env' is selected
 ![Screenshot 2025-04-20 184258](https://github.com/user-attachments/assets/0ef2a2a5-7e9f-4cb5-bf06-6de9352b1ec7)
 ![Screenshot 2025-04-20 184315](https://github.com/user-attachments/assets/3bc54821-c92d-4720-b512-c78512177f15)
 
@@ -128,7 +128,7 @@ pip3 install torch torchvision torchaudio
 ### 3.1 Download Pretrained Speaker Recognition Model
 
 
-1.  In termainl or Anaconda prompt where the enviroment is active, run the command to inliase lfs.
+1.  In terminal or Anaconda prompt where the enviroment is active, run the command to inliase lfs.
 
 ```bash
 git lfs install
@@ -177,7 +177,7 @@ https://drive.google.com/file/d/1oP-NXYggC-HDATSESRr3Fhxs9WrCK9sF/view?usp=shari
 ```bash
 echo > authentication-system-with-df-detection/.env.local
 ```
-Populate it with the necessary Firebase and email environment variables. These are not included in the repo for security reasons.These will be sent via secure communication
+Populate it with the necessary Firebase and email environment variables. These are not included in the repo for security reasons.These will be sent via secure communication(Will be in the packaged submmsion).
 
 
 
@@ -204,15 +204,17 @@ You are now ready to test the real-time voice authentication system with deepfak
 
 ---
 
-# 8. ---------------------------------KEY TESTING INFOMATION---------------------------------
+# 8. KEY TESTING INFOMATION
 
-### It could be useful to temporarily reduce the similarity threshold (e.g. to 0.4) when testing the authentication mechanism. Since complete access is necessary after registering before you may explore the dashboard features or remove your account and related personal data, this makes it easier for you to have access during initial testing.
+It could be useful to temporarily reduce the similarity threshold (e.g. to 0.4) when testing the authentication mechanism( Main.py line 276 ). Since complete access is necessary after registering before you may explore the dashboard features or remove your account and related personal data, this makes it easier for you to have access during initial testing.
 
-### By lowering the threshold, you can test and preview every part of the system, including the usage guidelines, account management, and deepfake detection findings. After functionality has been confirmed, you can gradually raise the threshold to assess how robust and dependable the system gets at higher levels. This helps in assessing the system's resilience to false positives and overall robustness.
+By lowering the threshold, you can test and preview every part of the system, including the usage guidelines, account management, and deepfake detection dashboard. After base  functionality has been confirmed, you can gradually raise the threshold to assess how robust and dependable the system gets at higher levels. This helps in assessing the system's resilience to false positives and overall robustness.
 
 # Datasets Download
 
-If you wish to download the datasets to be able to run the code in the jupyter notebooks, be prepared to download around 150GB worth of files, (Only 20GB is actually used)
+If you wish to download the datasets to be able to run the code in the jupyter notebooks, be prepared to download around 150GB worth of files, (Only 20GB is actually used) 
+
+See project folder structure bellow, to ensure the dataset is added in the right location
 
 ### 1. Release in the wild dataset (~7.6GB) - 
 
