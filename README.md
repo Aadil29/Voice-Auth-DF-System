@@ -31,11 +31,10 @@ A secure voice authentication system with deepfake audio detection. This project
 ## Prerequisites (Install If you don't already have them)
 1. Git - https://git-scm.com/downloads
 2. Anaconda Distribution - https://www.anaconda.com/download
-3. Node / npm??
 
 
 ## 1. In Terminal Or Command Prompt Clone the Repository.
-Enure you know where you have cloned the repository, it may be easier to navigate to the desktop using cd and clone the project there
+Ensure you know where you have cloned the repository, it may be easier to navigate to the desktop using cd and clone the project there
 
 ```bash
 git clone https://github.com/Aadil29/Voice-Auth-DF-System.git
@@ -252,5 +251,99 @@ https://www.kaggle.com/datasets/awsaf49/asvpoof-2019-dataset
 
 
 # Project folder structure
+
+VOICE-AUTH-DF-SYSTEM/
+│
+├── .vscode/                                # VSCode settings
+├── authentication-system-with-df-detection/
+│   ├── .next/                              # Next.js build output
+│   ├── node_modules/                       # Project dependencies
+│   ├── pretrained_models/
+│   │   └── spkrec-ecapa-voxceleb/          # Speaker embedding model
+│   ├── public/
+│   │   └── images/                         # Publicly accessible images
+│   └── src/
+│   │     ├── __pycache__/                    # Python cache
+│   │     ├── app/
+│   │     │   ├── components/                 # Reusable UI components
+│   │     │   │   ├── InputEmail.tsx
+│   │     │   │   ├── Navbar.tsx
+│   │     │   │   ├── otpInput.tsx
+│   │     │   │   ├── PasswordInput.tsx
+│   │     │   │   ├── RecordingCountdown.tsx
+│   │     │   │   ├── SignInVoiceAuth.tsx
+│   │     │   │   ├── SignUpVoiceAuth.tsx
+│   │     │   │   └── UrlProtection.tsx
+│   │     │   ├── dashboard/
+│   │     │   │   ├── deepfake/
+│   │     │   │   │   └── page.tsx            # Deepfake Detection UI
+│   │     │   │   ├── privacy/
+│   │     │   │   │   └── page.tsx            # Privacy Notice
+│   │     │   │   └── settings/
+│   │     │   │   │   └── page.tsx
+│   │     │   │   └── page.tsx   
+│   │     │   ├── email/
+│   │     │   │   └── route.ts
+│   │     │   ├── sign-in/
+│   │     │   │    └──page.tsx
+│   │     │   ├── sign-up/
+│   │     │   │   └── page.tsx
+│   │     │   ├── styles/                     
+│   │     │   │   ├── base.css
+│   │     │   │   ├── components.css
+│   │     │   │   ├── globals.css
+│   │     │   │   ├── layout.css
+│   │     │   │   ├── lettering.css
+│   │     │   │   ├── utilities.css
+│   │     │   │   ├── variables.css
+│   │     │   │   └── layout.tsx
+│   │     │   ├── page.tsx
+│   │     │   └── layout.tsx
+│   │     │ 
+│   │     ├── hooks/
+│   │     │   └── useAuth.ts
+│   │     ├── pth_models/                     
+│   │     │   ├── df_model.pth
+│   │     │   └── voice_model.pth
+│   │     ├── utils/                         
+│   │     │   ├── example_phrases.ts
+│   │     │   └── voiceAverage.ts
+│   │     │                   
+│   │     │
+│           ├── deepfake_audio.py                 # Deepfake inference backend
+│         ├── deepfake_preprocess_audio.py      # Deepfake preprocessing
+│         ├── firebase.ts                       # Firebase config
+│         ├── main.py                           # API entry point (FastAPI)
+│         ├── voice_audio.py                    # Speaker verification backend
+│         ├── voice_preprocess.py 
+
+
+
+│   │    └── tsconfig.json
+│   ├── .env.local 
+│   ├── next-env.d.ts
+    ├── next.config.ts
+    ├── postcss.config.mjs
+
+├── ml-models/
+│   ├── datasets/
+│   │   ├── evaluation/
+│   │   │   ├── for-2sec/
+│   │   │   └── LA/
+│   │   ├── preprocessed_vox/
+│   │   ├── release_in_the_wild/
+│   │   ├── vox1_dev/
+│   │   ├── vox1_subset_150/
+│   │   └── vox1_subset_test/
+│   ├── pretrained_models/
+│   │   ├── speaker_verification_pretrained.ipynb
+│   ├── deepfake-detection.ipynb            
+│   └── voice-identification.ipynb          
+│
+├── .gitignore
+└── README.md
+
+
+
 
 
