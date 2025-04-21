@@ -26,7 +26,8 @@ A secure voice authentication system with audio deepfake  detection.
 - [Project Folder Structure](#project-folder-structure)
 - [Links](#links)
 
-
+## KEY: 
+If you have access to the code as packaged submission, you may not need to create some folders/files, refer to the folder structre below and confirm before you add any folders/files using commands seen below 
 
 ## Prerequisites (Install If you don't already have them)
 1. Git - https://git-scm.com/downloads
@@ -204,7 +205,7 @@ You are now ready to test the real-time voice authentication system with deepfak
 
 ---
 
-# 8. KEY TESTING INFOMATION
+## 8. KEY TESTING INFOMATION
 
 It could be useful to temporarily reduce the similarity threshold (e.g. to 0.4) when testing the authentication mechanism( Main.py line 276 ). Since complete access is necessary after registering before you may explore the dashboard features or remove your account and related personal data, this makes it easier for you to have access during initial testing.
 
@@ -214,54 +215,78 @@ By lowering the threshold, you can test and preview every part of the system, in
 
 If you wish to download the datasets to be able to run the code in the jupyter notebooks, be prepared to download around 150GB worth of files, (Only 20GB is actually used) 
 
-See project folder structure bellow, to ensure the dataset is added in the right location
+See project folder structure below, to ensure the datasets are added in the right folders
+
+In the project terminal use the command to create the datasets folder and the evaluations folder
+
+```bash
+mkdir ml-modles/datasets
+mkdir ml-modles/datasets/evaluation
+```
+
 
 ### 1. Release in the wild dataset (~7.6GB) - 
 
-Go to the website and select download dataset, then extract and place it in voice-auth-df-system/ml-modles/datasets/
+Go to the website and select download dataset, then extract and place it in 
+### voice-auth-df-system/ml-modles/datasets/
 
 This is dataset is needed to run the deepfake-detection jupyter notebook 
+
 ```bash
+Download Link
+
 https://deepfake-total.com/in_the_wild
 ```
 
 ### 2. VoxCeleb1 (~60GB)
 
-This dataset needs to be requested so you need to provide the following details.(You must downald all 4(ABCD) parts and then concoate them togterh to be abel to take a sample from it) download the test dataset if you want to test. Place it in voice-auth-df-system/ml-modles/datasets/
+This dataset needs to be requested so you need to provide the following details.(You must downald all 4(ABCD) parts and then concatoante them together to be able to take a sample from it - download the test dataset if you want to test. Place it in  
+### voice-auth-df-system/ml-modles/datasets/
 
-
-Firstname, Surname, Affilicaion, Email seatila weill be rewuired to downlaid it.
 
 This is dataset is needed to run the voice-identification jupyter notebook 
 
+
 ```bash
+Download Link
 https://cn01.mmai.io/keyreq/voxceleb
 ```
 
 ### 3. Fake Or Real dataset (for-2sec) (~25GB)
 
-Used the sub set in the fake or real dataset for evaluation purposes for deepfake detection. Only the for-2sec directory was used, but you still need to download entire dataset. Place it in voice-auth-df-system/ml-modles/datasets/evaluation
+Used the sub set in the fake or real dataset for evaluation purposes for deepfake detection. Only the for-2sec directory was used, but you still need to download entire dataset. Place it in
+### voice-auth-df-system/ml-modles/datasets/evaluation
 
 This is dataset is needed to run the EVALUATING ON NEW DATASETS section of the deepfake-detection jupyter notebook 
 ```bash
-[https://cn01.mmai.io/keyreq/voxceleb](https://www.kaggle.com/datasets/mohammedabdeldayem/the-fake-or-real-dataset)
+Download Link
+https://www.kaggle.com/datasets/mohammedabdeldayem/the-fake-or-real-dataset
 ```
 
 ### 4. ASVspoof2019 dataset (LA_eval) (~22GB)
 
-Used for evaluation for deepfake detection.Only used the LA_eval for evaluation. Place it in voice-auth-df-system/ml-modles/datasets/evaluation.
+Used for evaluation for deepfake detection.Only use the LA_eval for evaluation. Place it in
+### voice-auth-df-system/ml-modles/datasets/evaluation
 
 This is dataset is needed to run the EVALUATING ON NEW DATASETS section of the deepfake-detection jupyter notebook 
 ```bash
+Download Link
 https://www.kaggle.com/datasets/awsaf49/asvpoof-2019-dataset
 ```
 
+### For datasets, the only base folders are there, meaning; vox1_subset was created via code in the notebbok, so do not make folders, the code will run and make what is need, as long as you have the base datastes in the correct location. 
 
+base datasets needed 
+
+- release-in-the-wild
+- vox1_dev
+- for-2sec
+- LA
 
 
 # Project folder structure
 
-### For datasets, the only base folders are there, meaning; vox1_subset was created via code in the notebbok, so do not make folders, the code will run and make what is need, as long as youi have the base datastes in teh correct location. 
+
 
 ![image](https://github.com/user-attachments/assets/8dedb2ca-4a35-4e85-864f-b86c3245f81b)
 
