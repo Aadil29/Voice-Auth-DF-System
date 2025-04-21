@@ -4,62 +4,67 @@ A secure voice authentication system with deepfake audio detection. This project
 
 ![Screenshot 2025-04-19 151923](https://github.com/user-attachments/assets/752c0612-4e95-41a1-a254-90979ed255a6)
 
-## 1. Clone the Repository
 
-Enure you have git installed for your system, https://git-scm.com/downloads
-First, clone the repository to your desired location using terminal or command prompt:
+## Table of Contents
+
+- [Prerequisites](#prerequisites-install-if-you-dont-already-have-them)
+- [1. Clone the Repository](#1-in-terminal-or-command-prompt-clone-the-repository)
+- [2. Environment Setup](#2-environment-setup)
+  - [2.1 Create Conda Environment](#in-terminal-or-anaconda-prompt-create-conda-environment)
+  - [2.2 Install Dependencies](#in-terminal-or-anaconda-prompt-actiavte-conda-enviroment-and-install-the-following-dependencies)
+  - [2.3 NumPy Fix](#numpy-error)
+  - [2.4 PyTorch Installation](#pytorch-installation)
+  - [2.5 Open in VS Code](#24-open-the-cloned-repository-voice-auth-df-system-in-vs-code)
+  - [2.6 Jupyter Setup](#25-python-interpreter-and-jupyter-notebook-setup)
+- [3. Model Downloads](#3-model-downloads)
+- [4. Deepfake Detection Model Weights](#4-add-deepfake-detection-model-weights-to-pth_models-folder)
+- [5. Environment Variables](#5-add-environment-variables)
+- [6. Run the Project](#6-run-the-project)
+- [7. Access the Website](#7-access-the-website)
+- [8. Key Testing Information](#8-key-testing-infomation)
+- [Datasets Download](#datasets-download)
+- [Project Folder Structure](#project-folder-structure)
+- [Links](#links)
+
+
+
+## Prerequisites (Install If you don't already have them)
+1. Git - https://git-scm.com/downloads
+2. Anaconda Distribution - https://www.anaconda.com/download
+3. Node / npm??
+
+
+## 1. In Terminal Or Command Prompt Clone the Repository.
+Enure you know where you have cloned the repository, it may be easier to navigate to the desktop using cd and clone the project there
 
 ```bash
 git clone https://github.com/Aadil29/Voice-Auth-DF-System.git
-```
-
-```bash
-cd Voice-Auth-DF-System
 ```
 
 ---
 
 ## 2. Environment Setup
 
-### 2.1 Install Conda
-
-Download and install Conda for your system(windows or mac)by following the instructions here (use the **Anaconda distribution version**) :  
-[Conda Installation Guide](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
-
-Open Anaconda prompt if on windows or terminal for mac os.
-
-In Anaconda prompt run this to confirm installation
-
-```bash
-conda info
-```
-
----
-
-### 2.2 Create and Activate Conda Environment
+### In Terminal or Anaconda prompt Create Conda Environment
 
 ```bash
 conda create -n final-voice-system-env python=3.10.16 -y
+```
+
+## In terminal or anaconda prompt actiavte conda enviroment and install the following dependencies 
+
+Activate conda enviroment
+
+```bash
 conda activate final-voice-system-env
 ```
 
----
-
-### 2.3 Install Required Dependencies, ensure you are in the correct conda enviorment(conda activate final-voice-system-env)
-## GPU USAGE - READ FIRST!!!, do not install unless your NVIDIA GPU supports this version specific version of cuda (cuda v12.2), and you have set it up correctly (https://www.youtube.com/watch?v=nATRPPZ5dGE&ab_channel=DSwithBappy)
-
-Run the following commands in anaconda prompt or terminal, read before running **with your Conda environment activated**:
-
-GPU USAGE
-```bash
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-```
-
-INSTALLS REQUIRED BY ALL (if issue install node js after via web)
+Install Dependencies/packages
 
 ```bash
 conda install -c conda-forge nodejs=22.1.0
 conda install -c conda-forge ffmpeg
+conda install anaconda::git-lfs
 npm install next react react-dom
 pip install fastapi uvicorn python-multipart pydantic aiofiles
 pip install numpy librosa sounddevice scipy pydub noisereduce ipywidgets
@@ -73,31 +78,48 @@ npm install --save-dev @types/nodemailer
 npm install concurrently --save-dev
 pip install ipykernel
 python -m ipykernel install --user --name final-voice-system-env --display-name "Python (final-voice-system-env)"
-
 ```
 
-###POSSIBLE ERROR
-If you get a warning about conflication numpy version, uninstill and re install this version, using the following command
+Numpy Error 
+If you get a warning about conflicting numpy versions, uninstall and re-install this version, using the following command.
 
 ```bash
 pip uninstall numpy -y
 pip install numpy==1.24.4
 ```
 
-### 2.4 Open the cloned repository in VS Code
+### Pytorch Installation  
 
-1. Open vs code
-1. Open the project folder (`Voice-Auth-DF-System`) in Visual Studio Code, from where it was downloaded.
+Nvidia GPU USAGE ONLY: 
+Do not install unless your NVIDIA GPU supports cuda v12.2, and you have set cuda up correctly - https://www.youtube.com/watch?v=nATRPPZ5dGE&ab_channel=DSwithBappy.
+But ensure to use this version of cuda https://developer.nvidia.com/cuda-12-2-0-download-archive. Once all that is doen you can run the command below
+- 
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+```
 
----
+#### Default (CPU or non-CUDA GPU): 
+
+```bash
+pip3 install torch torchvision torchaudio
+```
+
+
+
+
+### 2.4 Open the cloned repository (Voice-auth-df-system) in VS Code
+
 
 ### 2.5 Python interpreter and Jupyter notebook setup
 
-1. Open any Jupyter notebook in ml-models folder.
+1. Open a Jupyter notebook from the following direcotry voice-auth-df-system/ml-model/.
 2. In the top-right, select the Python interpreter.
 3. If prompted, install Jupyter-related extensions.
 4. Select the interpreter: `Python (final-voice-system-env)`.
-5. Double check by doing '>Python: select interpreter' in porject search, and ensure 'final-voice-system-env' is selected
+5. in the search  '>Python: select interpreter' in porject search, and ensure 'final-voice-system-env' is selected
+![Screenshot 2025-04-20 184258](https://github.com/user-attachments/assets/0ef2a2a5-7e9f-4cb5-bf06-6de9352b1ec7)
+![Screenshot 2025-04-20 184315](https://github.com/user-attachments/assets/3bc54821-c92d-4720-b512-c78512177f15)
+
 
 ---
 
@@ -105,96 +127,68 @@ pip install numpy==1.24.4
 
 ### 3.1 Download Pretrained Speaker Recognition Model
 
-https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb
 
-1.  install git lfs in final-auth-system-env using Anaconda prompt or terminal
-
-```bash
-   conda install anaconda::git-lfs
-```
-
-2.  run the command in final-auth-system-env using Anaconda prompt or terminal, Should see "Git LFS initialized". Means it's working
+1.  In termainl or Anaconda prompt where the enviroment is active, run the command to inliase lfs.
 
 ```bash
 git lfs install
 ```
 
-3.  Then clone the pretrained model into the pretrained_models folder in the vscode termainl
+2. In project terminal 
 
-    3.1. Make folder if not there already
+Create Pretrained_models folder using command below.
+![image](https://github.com/user-attachments/assets/5e2b0e14-2698-4049-adea-8ec3152b97d8)
 
 ```bash
  mkdir -p authentication-system-with-df-detection/pretrained_models
 
 ```
-
-### 3.2 Clone model
+Clone model into the folder just created
 
 ```bash
- git clone https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb
+cd authentication-system-with-df-detection/pretrained_models
+git clone https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb
 ```
+![Screenshot 2025-04-20 185226](https://github.com/user-attachments/assets/34848c11-e951-4f31-911c-bd2be0f330b5)
 
-You should now have this structure:
+https://huggingface.co/speechbrain/spkrec-ecapa-voxceleb
 
-authentication-system-with-df-detection/
-----pretrained_models/
-----spkrec-ecapa-voxceleb/
 
----
 
 ## 4. Add deepfake detection model weights to pth_models folder
 
-4.1 create pth_modle fodler. run this in project terminal:
+4.1 In project terminal create this folder 
 
 ```bash
 mkdir authentication-system-with-df-detection/src/pth_models
 ```
 
-4.2 Download the file from this link, and unzip and move it into the pth_models folder.
-You will see this warning ('Google Drive can't scan this file for viruses.'), but its completly safe, so dont worry:
+4.2 Download file, unzip and move it into the pth_models folder.
+You will see this warning when downloading the file ('Google Drive can't scan this file for viruses.'), but its completly safe, so dont worry:
 
 ```bash
-(https://drive.google.com/file/d/1oP-NXYggC-HDATSESRr3Fhxs9WrCK9sF/view?usp=sharing)
+https://drive.google.com/file/d/1oP-NXYggC-HDATSESRr3Fhxs9WrCK9sF/view?usp=sharing
 ```
 
 ## 5. Add Environment Variables
 
-5.1 Create a .ene.local file in the `authentication-system-with-df-detection/` directory, create a `.env.local` file.
-Then populate it with the necessary Firebase and email environment variables. These are not included in the repo for security reasons.These will be sent via secure communication
+5.1 In project terminal create a .env.local file
 
 ```bash
 echo > authentication-system-with-df-detection/.env.local
 ```
-
+Populate it with the necessary Firebase and email environment variables. These are not included in the repo for security reasons.These will be sent via secure communication
 ---
 
-### 5. Verify `package.json` Scripts and project folder
-
-Ensure your `package.json` includes the following scripts:
-
-```json
-
-   "api": "python -m uvicorn src.main:app --reload",
-    "start-all": "concurrently \"npm run dev\" \"npm run api\"",
-    "email": "email dev --dir src/app/emails"
-
-```
-
-![Screenshot 2025-04-19 024621](https://github.com/user-attachments/assets/8b54ccde-4c64-45a9-afb7-d0e86653ef0a) : ![Screenshot 2025-04-19 024841](https://github.com/user-attachments/assets/095ebd05-efa4-4f7c-972f-03bd78c736b3)
-
-> You may need to update the `"api"` path if your Python environment is located elsewhere on macOS or Linux.
-
----
 
 ## 6. Run the Project
 
-Open a terminal in the root project directory and run:
+In project terminal run the commands 
 
 ```bash
 cd authentication-system-with-df-detection
 npm run start-all
 ```
-
 This will start both the frontend and the backend concurrently.
 
 ---
@@ -210,9 +204,9 @@ You are now ready to test the real-time voice authentication system with deepfak
 
 ---
 
-## 8. ---------------------------------KEY TESTING INFOMATION---------------------------------
+# 8. ---------------------------------KEY TESTING INFOMATION---------------------------------
 
-## It could be useful to temporarily reduce the similarity threshold (e.g. to 0.4) when testing the authentication mechanism. Since complete access is necessary after re#gistering before you may explore the dashboard features or remove your account and related personal data, this makes it easier for you to have access during initial testing.
+## It could be useful to temporarily reduce the similarity threshold (e.g. to 0.4) when testing the authentication mechanism. Since complete access is necessary after registering before you may explore the dashboard features or remove your account and related personal data, this makes it easier for you to have access during initial testing.
 
 ## By lowering the threshold, you can test and preview every part of the system, including the usage guidelines, account management, and deepfake detection findings. After functionality has been confirmed, you can gradually raise the threshold to assess how robust and dependable the system gets at higher levels. This helps in assessing the system's resilience to false positives and overall robustness.
 
@@ -254,6 +248,9 @@ Used for evaluation for deepfake detection.Only used the LA_eval for evaluation.
 https://www.kaggle.com/datasets/awsaf49/asvpoof-2019-dataset
 ```
 
+
+
+
 # Project folder structure
 
-![alt text](image-1.png)
+
