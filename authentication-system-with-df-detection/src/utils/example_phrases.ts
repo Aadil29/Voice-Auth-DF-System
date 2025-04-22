@@ -1,6 +1,6 @@
 /* 
   utility generates a random passphrase using a pool of predefined words.
-  It’s used for voice authentication prompts, ensuring each user gets a unique
+  It’s used for the voice authentication prompts, ensuring each user gets a unique
   and pronounceable challenge phrase made up of real words.
 */
 
@@ -39,7 +39,7 @@ const sampleWords = [
   "notebook",
   "lantern",
   "snowflake",
-  "airplane",
+  "aeroplane",
   "diamond",
   "kitchen",
   "violin",
@@ -47,13 +47,9 @@ const sampleWords = [
   "penguin",
   "teacup",
   "backpack",
-  "drawer",
-  "eraser",
   "helmet",
   "jacket",
-  "ladder",
   "necklace",
-  "quartz",
   "zebra",
   "Audio",
   "Shield",

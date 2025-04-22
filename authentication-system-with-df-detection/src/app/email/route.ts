@@ -2,6 +2,7 @@
   This endpoint receives an email address and a 6-digit verification code,
   then sends the code via email using the Brevo (formerly Sendinblue) API.
   It returns a success or error response depending on whether the email was sent.
+
 */
 
 export const runtime = "nodejs"; // Specifies this API route runs in a Node.js environment
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
     </html>
   `;
 
+  // API key must be set in the .env file for Brevo to work
   const apiKey = process.env.BREVO_API_KEY;
 
   if (!apiKey) {

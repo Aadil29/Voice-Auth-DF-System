@@ -1,3 +1,14 @@
+/* 
+  Base Styling
+
+  This file sets the foundational layout and appearance across the entire application.
+  It handles box model settings, lettering, full-height layout, background animation,
+  and default behaviours like link styling.
+
+*/
+
+/* Box model: ensure all elements use border-box sizing.
+   This makes layout calculations more predictable and avoids unexpected overflow.  */
 *,
 *::before,
 *::after {
@@ -6,16 +17,30 @@
   padding: 0;
 }
 
+/* Ensure the page occupies full height and prevents vertical scroll.
+      Background includes a smooth animated gradient loop. */
 html,
 body {
   height: 100%;
-  background: var(--col-bg);
-  colour: var(--col-fg);
-  font-family: var(--font-base);
-  font-size: var(--fs-base);
+  overflow-y: hidden; /* prevents page from scrolling vertically,without this line parrallex effect will cause 2 scroll bars */
   line-height: 1.5;
+  background: linear-gradient(135deg, #35a5ad, #1c3468, #36bb8f);
+  background-size: 400% 400%; /* allows enough area for the gradient to move */
+  animation: gradientFlow 15s ease infinite; /* infinite looping animation */
+  color: white; /* global text colour */
+  font-family: var(--font-base);
+  font-size: var(--fs-base); /* responsive base font size from root */
 }
-a {
-  text-decoration: none;
-  colour: inherit;
+
+/* Animated background gradient: cycles through colours to create a flowing effect */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

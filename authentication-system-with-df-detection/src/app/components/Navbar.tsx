@@ -27,6 +27,10 @@ export default function Navbar() {
           <Link href="/dashboard/deepfake">Deepfake Detection</Link>
         </li>
 
+        <li className={pathname === "/dashboard/privacy" ? "active" : ""}>
+          <Link href="/dashboard/privacy">Privacy and Misuse</Link>
+        </li>
+
         <li className={pathname === "/dashboard/settings" ? "active" : ""}>
           <Link href="/dashboard/settings">Settings</Link>
         </li>

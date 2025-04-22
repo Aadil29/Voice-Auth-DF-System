@@ -1,73 +1,88 @@
-/* This component renders an input field where users can enter a 6-digit verification code.
- The code is checked against a record stored in Firestore (under the user's email).
+/*
+otpInput.tsx
+
+ This component renders an input field where users can enter a 6-digit verification code.
+ It Also generates the code and auto exopires it within 10 minutes, this can be changed to a lower number 
+ for more security
+ The code is checked against a record stored in Firestore (under the user's email) which is kept secure.
+
  */
 
 "use client";
 
 import { useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase"; // Import the configured Firestore instance
-import { useRouter } from "next/navigation"; // Hook for client-side navigation
+import { db } from "@/firebase";
 
-interface Props {
-  email: string; // Email of the user, used to find their OTP record in Firestore
+interface OTPInputProps {
+  uid: string; // Firebase user ID — used to fetch OTP record
+  email: string; // For display (e.g. "code sent to this email")
+  onSuccess: () => void; // Called once the user enters the correct code
 }
 
-export default function OTPInputComponent({ email }: Props) {
-  const [code, setCode] = useState(""); // Stores the user's input for the OTP
-  const [error, setError] = useState(""); // Stores error messages to display
-  const router = useRouter(); // Used to redirect the user after successful verification
+export default function OTPInput({ uid, email, onSuccess }: OTPInputProps) {
+  const [code, setCode] = useState(""); // User's typed OTP
+  const [error, setError] = useState(""); // Any error message to display
 
+  // Runs when user clicks "Verify"
   const handleVerify = async () => {
-    setError(""); // Reset error state before starting verification
+    setError(""); // Clear old errors
 
     try {
-      // Create a reference to the Firestore document storing the verification code for this email
-      const ref = doc(db, "emailVerifications", email);
-      const snap = await getDoc(ref); // Attempt to fetch the document
+      // Pull the OTP record from Firestore using the user's UID
+      const ref = doc(db, "emailVerifications", uid);
+      const snap = await getDoc(ref);
 
       if (!snap.exists()) {
-        // No OTP record found for this email
         setError("No verification record found.");
         return;
       }
 
       const data = snap.data();
-      const createdAt = data.createdAt?.toDate?.(); // Convert Firestore timestamp to JS Date
-      const expires = createdAt ? createdAt.getTime() + 10 * 60 * 1000 : 0; // Set expiry to 10 minutes from creation
 
-      if (Date.now() > expires) {
-        // If current time is past the expiry time, the OTP has expired
+      // Check if OTP has expired (10-minute window)
+      const createdAt = data.createdAt?.toDate?.().getTime() || 0;
+      const isExpired = Date.now() > createdAt + 10 * 60 * 1000;
+      if (isExpired) {
         setError("Code expired. Please sign up again.");
         return;
       }
 
+      // Check if the entered code matches the saved one
       if (data.code !== code) {
-        // Entered code does not match the one in Firestore
         setError("Incorrect code.");
         return;
       }
 
-      // Code is valid and within the expiry period, redirect to sign-in page
-      router.push("/sign-in");
-    } catch (err) {
-      // Catch any unexpected errors during the verification process
-      setError("Something went wrong.");
+      // Everything checks out – trigger success callback (usually redirects user)
+      onSuccess();
+    } catch {
+      setError("Something went wrong verifying your code.");
     }
   };
 
   return (
-    <div style={{ marginTop: "1rem" }}>
-      <h3>Enter the code sent to your email</h3>
-      <input
-        type="text"
-        placeholder="6-digit code"
-        value={code}
-        onChange={(e) => setCode(e.target.value)} // Update the code state as the user types
-      />
-      <button onClick={handleVerify}>Verify</button>
-      {error && <p style={{ color: "red" }}>{error}</p>}{" "}
-      {/* Display an error message if one exists */}
+    <div className="otp-section">
+      <h4 className="otp-heading">
+        Enter the 6‑digit code sent to <strong>{email}</strong>
+      </h4>
+
+      <div className="otp-input-group">
+        <input
+          type="text"
+          className="otp-input"
+          placeholder="Enter verification code"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          maxLength={6}
+        />
+        <button className="verify-btn" onClick={handleVerify}>
+          Verify
+        </button>
+      </div>
+
+      {/* Show error if there's any problem during verification */}
+      {error && <p className="error-text">{error}</p>}
     </div>
   );
 }

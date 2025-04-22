@@ -1,61 +1,54 @@
-/* 
-  This page handles user login using email and password. 
-  After verifying credentials with Firebase, the user is prompted with voice authentication.
-  If the voice is verified successfully, the user is redirected to the dashboard.
-  The page also supports password reset and toggling password visibility.
-*/
-
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   signInWithEmailAndPassword,
-  getAuth,
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "@/firebase";
-import VoiceAuth from "@/app/sign-in/VoiceAuth";
 import { generatePassphrase } from "@/utils/example_phrases";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
+import SignInVoiceAuth from "@/app/components/SignInVoiceAuth";
+import PasswordInput from "@/app/components/PasswordInput";
+import InputEmail from "@/app/components/InputEmail";
+import OTPInput from "@/app/components/OTPInput"; // added import
 
 export default function SignInPage() {
   const router = useRouter();
 
-  const [email, setEmail] = useState(""); // User input: email
-  const [password, setPassword] = useState(""); // User input: password
-  const [uid, setUid] = useState<string | null>(null); // Set after successful email/password sign-in
-  const [show, setShow] = useState(false); // Controls password visibility toggle
-  const [error, setError] = useState(""); // Displays error or success messages
-  const [passphrase, setPassphrase] = useState(""); // Voice passphrase to read
-  const [voiceConfirmed, setVoiceConfirmed] = useState(false); // True after voice match is confirmed
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [uid, setUid] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  const [passphrase, setPassphrase] = useState("");
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [voiceVerified, setVoiceVerified] = useState(false); // NEW state for voice verification
+
+  const isValid = email.trim() !== "" && password !== "";
 
   useEffect(() => {
-    setPassphrase(generatePassphrase()); // Create a random voice phrase when the page loads
+    setPassphrase(generatePassphrase());
   }, []);
 
-  // Triggered when the user submits their email and password
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
       const userCred = await signInWithEmailAndPassword(auth, email, password);
-      const uid = userCred.user.uid;
-      setUid(uid); // Only move forward to voice auth after successful email/password check
+      setUid(userCred.user.uid);
+      setShowPopUp(true); // Show voice modal
     } catch (err: any) {
-      setError(err.message); // Firebase will return user-friendly messages
+      setError(err.message);
     }
   };
 
-  // Triggered when the "Forgot password?" link is clicked
   const handlePasswordReset = async () => {
     if (!email) {
       setError("Please enter your email to reset password.");
       return;
     }
-
     try {
       await sendPasswordResetEmail(auth, email);
       setError("Password reset email sent. Please check your inbox.");
@@ -64,85 +57,88 @@ export default function SignInPage() {
     }
   };
 
-  // Redirect to dashboard once voice is verified
-  useEffect(() => {
-    if (voiceConfirmed) {
-      router.push("/dashboard");
-    }
-  }, [voiceConfirmed, router]);
-
   return (
-    <main className="auth-container">
-      <form onSubmit={handleSubmit} className="auth-form">
-        <h1>Sign In</h1>
+    <main className="signup-page">
+      <div className="signup-box">
+        {!voiceVerified && (
+          <form onSubmit={handleSubmit}>
+            <h1>Sign In</h1>
 
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password">Password</label>
-          <div style={{ position: "relative" }}>
-            <input
-              id="password"
-              type={show ? "text" : "password"} // Toggle between plain and hidden text
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              required
-              style={{ paddingRight: "2rem" }}
+            <InputEmail
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
-            {/* Password reset link appears inside the field area */}
-            <p style={{ textAlign: "right", marginTop: "0.5rem" }}>
+            <PasswordInput
+              label="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+            />
+
+            <div style={{ textAlign: "right", marginTop: "-0.5rem" }}>
               <button
                 type="button"
                 onClick={handlePasswordReset}
                 style={{
                   background: "none",
                   border: "none",
-                  color: "#0e508d",
+                  color: "var(--col-primary)",
                   textDecoration: "underline",
                   cursor: "pointer",
                   fontSize: "0.9rem",
+                  fontWeight: "600",
                 }}
               >
                 Forgot password?
               </button>
-            </p>
-          </div>
-        </div>
+            </div>
 
-        {/* Only show voice auth if email/password sign-in succeeds */}
-        {uid && (
-          <VoiceAuth
+            <button
+              type="submit"
+              className="signup-btn"
+              style={{ marginTop: "1rem" }}
+              disabled={!isValid}
+            >
+              Sign In
+            </button>
+
+            {error && <p className="error-text">{error}</p>}
+
+            <div className="nav-links">
+              <Link href="/sign-up">Sign Up</Link> |{" "}
+              <Link href="/">Back to Home</Link>
+            </div>
+          </form>
+        )}
+
+        {/* OTP component after voice verification */}
+        {voiceVerified && uid && (
+          <OTPInput
             uid={uid}
-            passphrase={passphrase}
-            onConfirm={(confirmed) => setVoiceConfirmed(confirmed)}
+            email={email}
+            onSuccess={() => router.push("/dashboard")}
           />
         )}
 
-        <button type="submit">Sign In</button>
-
-        {/* Navigation links for users who want to sign up or return to homepage */}
-        <Link href="/sign-up" className="back-home-link">
-          Sign Up
-        </Link>
-        <Link href="/" className="back-home-link">
-          Back to Home
-        </Link>
-
-        {/* Display error or reset message */}
-        {error && <p className="error-message">{error}</p>}
-      </form>
+        {/* Voice auth modal */}
+        {showPopUp && uid && (
+          <SignInVoiceAuth
+            uid={uid}
+            email={email}
+            passphrase={passphrase}
+            onClose={() => setShowPopUp(false)}
+            onSuccess={() => {
+              setVoiceVerified(true); // flag to trigger OTP step
+              setShowPopUp(false);
+            }}
+            onFailure={() => {
+              setError("Voice authentication failed.");
+              setShowPopUp(false);
+            }}
+          />
+        )}
+      </div>
     </main>
   );
 }

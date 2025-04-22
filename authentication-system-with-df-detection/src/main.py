@@ -7,17 +7,33 @@ This server handles:
 - Voice authentication using speaker embeddings (speechbrains pre trained model - spkrec-ecapa-voxceleb)
 - Email verification and Firebase integration
 - Audio preprocessing, conversion, and feature extraction
+
 """
 
 # FastAPI core
 from fastapi import FastAPI, Query, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi import Request
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+
+
+
+
+# 2) Initialize the Limiter, telling it to use Redis storage
+limiter = Limiter(
+    key_func=get_remote_address,
+    storage_uri="memory://"
+    #using memory as its a local proof of cooncept so need need to use redis
+
+)
 
 # Whisper & Audio I/O
 import whisper
 import sounddevice as sd
-import scipy.io.wavfile
 import librosa
 import io
 import tempfile
@@ -26,6 +42,7 @@ import tempfile
 import numpy as np
 import torch
 import torch.nn.functional as F
+import torchaudio
 
 # Firebase
 import firebase_admin
@@ -72,6 +89,19 @@ if not firebase_admin._apps:
 #FastAPI App Setup 
 app = FastAPI()
 
+
+# Rate limitng Attach limiter to the app state and add middleware
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
+
+# Override the default 429 handler to return JSON
+@app.exception_handler(RateLimitExceeded)
+async def ratelimit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "Rate limit exceeded. Try again later."}
+    )
+
 # Allow frontend access (adjust origins in prod)
 app.add_middleware(
     CORSMiddleware,
@@ -81,7 +111,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load Whisper transcription model
+# Load Whisper transcription model, you can this if transcribing isnt good enough,
+#("ting","base","small","medium" and "large")
 model = whisper.load_model("medium")
 
 # Simple preprocessor for comparing text against expected passphrase
@@ -89,52 +120,65 @@ def clean_text(text: str) -> str:
     return re.sub(r"[^\w\s]", "", text).lower().strip()
 
 #Whisper Transcription Endpoint
-@app.get("/listen")
-def listen(passphrase: str = Query(...)):
-    duration = 6  
-    samplerate = 22050 
+@app.post("/listen/")
+@limiter.limit("10/minute")
+async def listen(
+    request: Request,
+    file: UploadFile = File(...),
+    passphrase: str = Query(...)
+):
+
+    # 1) save the incoming WebM to a temp file
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_webm:
+        temp_webm.write(await file.read())
+        webm_path = temp_webm.name
 
     try:
-        print("Recording...")
-        audio = sd.rec(int(duration * samplerate), samplerate=samplerate, channels=1, dtype='float32')
-        sd.wait()
+        # 2) convert WebM → WAV
+        wav_path = convert_webm_to_wav(webm_path)
 
-        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
-            scipy.io.wavfile.write(f.name, samplerate, audio)
-            audio_path = f.name
-
-        print("Transcribing...")
-        result = model.transcribe(audio_path)
+        # 3) run Whisper transcription
+        result = model.transcribe(wav_path)
         raw_text = result.get("text", "")
 
+        # 4) clean & compare against expected passphrase
         cleaned_text = clean_text(raw_text)
-        cleaned_passphrase = clean_text(passphrase)
+        cleaned_pass = clean_text(passphrase)
+        confirmed = cleaned_pass in cleaned_text
 
-        is_confirmed = cleaned_passphrase in cleaned_text
-
-        return {"text": raw_text, "confirmed": is_confirmed}
-    except Exception as e:
-        return {"error": str(e)}
+        return {"text": raw_text, "confirmed": confirmed}
+    finally:
+        # 5) clean up temp files
+        for p in (webm_path, wav_path):
+            try:
+                os.remove(p)
+            except Exception:
+                pass
 
 
 #Deepfake Detection (WAV upload)
 model_df = AudioDeepfakeFusionModel()
 model_path = os.path.join(os.path.dirname(__file__), "pth_models", "df_model.pth")
-model_df.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
+model_df.load_state_dict(torch.load(model_path, map_location=torch.device('cpu'),weights_only=True))
 model_df.eval()
 
 @app.post("/predict/")
-async def predict(file: UploadFile = File(...)):
+@limiter.limit("4/minute")  # Rate limiting to prevent abuse
+async def predict(request: Request, file: UploadFile = File(...)):
     try:
+        # Read and decode uploaded WAV file
         audio_bytes = await file.read()
         y, sr = librosa.load(io.BytesIO(audio_bytes), sr=22050)
 
+        # Preprocess the audio (normalise, trim/pad, etc.)
         y = dfpreprocess_audio(y, sr=22050, target_duration=6.0, apply_preemphasis=False, coef=0.5, normalise='rms')
+
+        # Extract 10 audio features
         features = dfextract_features_from_audio(y, sr, target_shape=(128, 259))
         if features is None:
             return {"error": "Feature extraction failed."}
 
-        # Run features through model
+        # Run the model prediction using the ordered feature inputs
         inputs = [features[k] for k in [
             'mfcc', 'chroma', 'tonnetz', 'spectral_contrast', 'pitch',
             'energy', 'zcr', 'onset_strength', 'spectral_centroid', 'mel_spectrogram'
@@ -146,15 +190,17 @@ async def predict(file: UploadFile = File(...)):
             label = "bonafide" if prob >= 0.5 else "spoof"
 
         return {"prediction": label, "confidence": round(prob, 2)}
+
     except Exception as e:
         return {"error": f"Prediction failed: {str(e)}"}
 
 
 #Deepfake Detection (WEBM/Frontend use)
 @app.post("/deepfake-auth-predict/")
-async def deepfake_auth_predict(file: UploadFile = File(...)):
+@limiter.limit("10/minute")
+async def deepfake_auth_predict(request: Request, file: UploadFile = File(...)):
     try:
-        # Save uploaded WEBM
+        # Save uploaded WEBM file temporarily
         with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_webm:
             temp_webm.write(await file.read())
             webm_path = temp_webm.name
@@ -162,18 +208,18 @@ async def deepfake_auth_predict(file: UploadFile = File(...)):
         # Convert to WAV
         wav_path = convert_webm_to_wav(webm_path)
 
-        # Load and process
+        # Preprocess audio
         y, sr = librosa.load(wav_path, sr=22050)
         y = dfpreprocess_audio(y, sr=sr, target_duration=6.0, apply_preemphasis=False, coef=0.5, normalise="rms")
         features = dfextract_features_from_audio(y, sr, target_shape=(128, 259))
         if features is None:
             return {"error": "Feature extraction failed."}
 
-        # Predict
+        # Run prediction
         inputs = [features[k] for k in features]
         with torch.no_grad():
             output = model_df(*inputs)
-            prob = torch.sigmoid(output).item()
+            prob = output.item()
             label = "bonafide" if prob >= 0.5 else "spoof"
 
         return {"prediction": label, "confidence": round(prob, 2)}
@@ -185,7 +231,7 @@ async def deepfake_auth_predict(file: UploadFile = File(...)):
 from speechbrain.inference.speaker import SpeakerRecognition
 speaker_model = SpeakerRecognition.from_hparams(source="pretrained_models/spkrec-ecapa-voxceleb")
 
-import torchaudio
+
 
 def get_embedding(wav_path: str):
     signal, fs = torchaudio.load(wav_path)
@@ -204,15 +250,19 @@ def convert_webm_to_wav(webm_path):
 
 #Extract Voice Embedding
 @app.post("/extract-embedding/")
-async def extract_embedding(file: UploadFile = File(...)):
+@limiter.limit("10/minute")
+async def extract_embedding(request: Request, file: UploadFile = File(...)):
     try:
+        # Save WEBM audio
         with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_webm:
             temp_webm.write(await file.read())
             webm_path = temp_webm.name
 
+        # Convert and extract embedding
         wav_path = convert_webm_to_wav(webm_path)
         embedding = get_embedding(wav_path)
 
+        # Clean up
         os.remove(webm_path)
         os.remove(wav_path)
 
@@ -221,28 +271,32 @@ async def extract_embedding(file: UploadFile = File(...)):
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 
-#Compare New vs Stored Embedding
-def compare_embeddings(embedding1, embedding2, threshold=0.7):
+
+#Compare New vs Stored Embedding using cosine similarity
+def compare_embeddings(embedding1, embedding2, threshold=0.6):
     similarity = 1 - cosine(embedding1, embedding2)
     return similarity, similarity >= threshold
 
 
 #Speaker Verification (Login Check)
 @app.post("/verify-embedding/")
-async def verify_embedding(file: UploadFile = File(...), uid: str = Form(...)):
+@limiter.limit("10/minute")
+async def verify_embedding(request: Request, file: UploadFile = File(...), uid: str = Form(...)):
     try:
-        # Save uploaded audio
+        # Save uploaded WEBM
         with tempfile.NamedTemporaryFile(delete=False, suffix=".webm") as temp_file:
             temp_file.write(await file.read())
             webm_path = temp_file.name
 
+        # Convert and get new embedding
         wav_path = convert_webm_to_wav(webm_path)
         new_embedding = get_embedding(wav_path)
 
+        # Clean up temp files
         os.remove(webm_path)
         os.remove(wav_path)
 
-        # Retrieve stored embedding from Firebase
+        # Retrieve stored embedding from Firestore
         doc = firestore.client().collection("voiceEmbeddings").document(uid).get()
         if not doc.exists:
             raise HTTPException(status_code=404, detail="User embedding not found.")
@@ -251,11 +305,13 @@ async def verify_embedding(file: UploadFile = File(...), uid: str = Form(...)):
         if not stored_embedding:
             raise HTTPException(status_code=404, detail="Stored embedding is missing.")
 
+        # Compare new vs stored
         similarity, confirmed = compare_embeddings(new_embedding, stored_embedding)
 
         return {
             "similarity": float(similarity),
             "confirmed": bool(confirmed)
         }
+
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)

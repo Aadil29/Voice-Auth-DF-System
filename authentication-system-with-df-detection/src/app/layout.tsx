@@ -5,18 +5,12 @@
 */
 
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./styles/globals.css";
 
 // Load Geist Sans with a custom CSS variable
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-// Load Geist Mono (monospace) font with a CSS variable
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -35,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`} // Apply both fonts globally with smoothing
+        className={`${geistSans.variable} antialiased`} // Apply font globally with smoothing
       >
         {children}
       </body>
