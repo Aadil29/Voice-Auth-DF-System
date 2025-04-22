@@ -2,6 +2,16 @@
 
 A secure voice authentication system with audio deepfake detection.
 
+<KEY INFOMATION>
+(note folder submission contains all the datastets used in development and testing, see download datasets to see the size of each) - entire voice-auth-df-system is around 90GB, if you would prefer to only test the web application that is the main part of the project thatuses the  models, you can follow the steps on github(https://github.com/Aadil29/Voice-Auth-DF-System) and clone the repository from there, as datasets arent used in that part of the code(making it easier to download).
+
+For the packaged submission you need to download the voice-auth-df-system folder
+
+If for any reason, erros occur in the packaged submision, follow the steps/ cloning from github.Then if you wish to add the datasets, you can drag and drop them into the correct folder - See folder structure below
+ONE DRIVE LINK =>
+
+<KEY INFOMATION>
+
 ![image](https://github.com/user-attachments/assets/1d7ecefd-e468-4eba-b747-141eb8b5fe6c)
 
 ## Table of Contents
@@ -205,6 +215,11 @@ It could be useful to temporarily reduce the similarity threshold (e.g. to 0.4) 
 
 By lowering the threshold, you can test and preview every part of the system, including the usage guidelines, account management, and deepfake detection dashboard. After base functionality has been confirmed, you can gradually raise the threshold to assess how robust and dependable the system gets at higher levels. This helps in assessing the system's resilience to false positives and overall robustness.
 
+When testing the deepfake detection page, you can look online and find .wav audi odeepfake files, or select some from the datastes for deepfake detection.
+
+When you first load the webiste up.
+-Sign up using valid details, and follow the process. Once verified and registerd you will be navigated to sign in. Here again follow the steps, i.e email, password, then the voice authentication phase wiht the audio deepfake detection.
+
 # Datasets Download
 
 If you wish to download the datasets to be able to run the code in the jupyter notebooks, be prepared to download around 150GB worth of files, (Only 20GB is actually used)
@@ -282,15 +297,17 @@ base datasets needed
 
 # Project folder structure
 
-voice-auth-df-system
+voice-auth-df-system.
+
+description of each page and what it does is found at the top of each page/cell
 
 - .vscode
 - authentication-system-with-df-detection
   - .next
   - node_modules
   - pretrained_models
-    - spkrec-ecapa-voxceleb
-  - public
+    - spkrec-ecapa-voxceleb # used in speaker identification
+  - public # contains image folder for used images
   - src
     - **pycache**
     - app
@@ -327,7 +344,7 @@ voice-auth-df-system
       - variables.css
     - layout.tsx
     - page.tsx
-  - pth_models
+  - pth_models # weight used in deepfake detection phase
     - df_model.pth
     - Voice-Train.pth
   - utils
