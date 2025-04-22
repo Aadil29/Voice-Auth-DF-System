@@ -288,6 +288,92 @@ base datasets needed
 
 
 
+voice-auth-df-system
+ - .vscode
+ - authentication-system-with-df-detection
+   - .next
+   - node_modules
+   - pretrained_models
+     - spkrec-ecapa-voxceleb
+   - public
+   - src
+     - __pycache__
+     - app
+       - components
+         - InputEmail.tsx
+         - Navbar.tsx
+         - OTPInput.tsx
+         - PasswordInput.tsx
+         - RecordingCountdown.tsx
+         - SignInVoiceAuth.tsx
+         - SignUpVoiceAuth.tsx
+         - UrlProtection.tsx
+       - dashboard
+         - deepfake
+           - page.tsx
+         - privacy
+           - page.tsx
+         - settings
+           - page.tsx
+       - page.tsx
+     - email
+       - route.ts
+     - sign-in
+       - page.tsx
+     - sign-up
+       - page.tsx
+     - styles
+       - base.css
+       - components.css
+       - globals.css
+       - layout.css
+       - lettering.css
+       - utilities.css
+       - variables.css
+     - layout.tsx
+     - page.tsx
+   - pth_models
+     - df_model.pth
+     - Voice-Train.pth
+   - utils
+     - example_phrases.ts
+     - voiceAverage.ts
+     ---- 
+     - deepfake_audio.py
+     - deepfake_preprocess_audio.py
+     - firebase.ts
+     - main.py
+     - voice_audio.py
+     - voice_preprocess.py
+   - .env.local
+   - next-env.d.ts
+   - next.config.ts
+   - package-lock.json
+   - package.json
+   - postcss.config.mjs
+   - tsconfig.json
+ - ml-models
+   - datasets
+     - evaluation
+       - for-2sec
+         - LA
+     - preprocessed_vox
+     - release_in_the_wild
+     - vox1_dev
+     - vox1_processed
+     - vox1_subset_150
+     - vox1_subset_test
+   - model-weights
+   - Test-pretrained-models
+     - speaker_verification_pretrained.ipynb
+   - deepfake-detection.ipynb
+   - voice-identification.ipynb
+ - node_modules
+ - .gitignore
+ - README.md
+
+
+
 ![image](https://github.com/user-attachments/assets/8dedb2ca-4a35-4e85-864f-b86c3245f81b)
 
 
