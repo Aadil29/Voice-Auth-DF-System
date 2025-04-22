@@ -24,7 +24,6 @@ A secure voice authentication system with audio deepfake  detection.
 - [8. Key Testing Information](#8-key-testing-infomation)
 - [Datasets Download](#datasets-download)
 - [Project Folder Structure](#project-folder-structure)
-- [Links](#links)
 
 ## KEY: 
 If you have access to the code as packaged submission, you may not need to create some folders/files, refer to the folder structre below and confirm before you add any folders/files using commands seen below 
